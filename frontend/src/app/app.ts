@@ -1,12 +1,39 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Header } from './header/header'
+import { AuthService } from './services/auth'
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Header],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('smart-recipe-front');
+
+export class App implements OnInit{
+  messageDuBackend: string = 'En attente du backend...';
+
+  authService = inject(AuthService);
+
+  private http = inject(HttpClient);
+
+  ngOnInit() {
+    this.appelerLeBackend();
+  }
+
+  appelerLeBackend() {
+    this.http.get<{message: string}>('http://localhost:8000/')
+    .subscribe({
+      next: (data) => {
+        this.messageDuBackend = data.message;
+      },
+      error: (err) => {
+        this.messageDuBackend = 'Erreur de connexion';
+      }
+    })
+
+  }
 }
+
+

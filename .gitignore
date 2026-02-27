@@ -1,0 +1,14 @@
+# --- Backend / Python ---
+**/__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# --- IDEs ---
+.vscode/
+.idea/
+
+# --- Divers ---
+.DS_Store
+*.log

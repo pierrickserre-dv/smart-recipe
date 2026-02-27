@@ -1,0 +1,19 @@
+<div class="login-container">
+    <h2>Register</h2>
+
+    <input type="email" [(ngModel)]="email" placeholder="Email" />
+    <input type="password" [(ngModel)]="password" placeholder="Mot de passe" />
+
+    <button (click)="onSubmit()">Créer un compte</button>
+
+    <hr>
+
+    @if (authService.user()) {
+        <p style="color: green;">
+            Tu as créé un compte. Tu es bien connecté en tant que {{ authService.user()?.email }}.
+        </p>
+        <button (click)="authService.logout()">Se déconnecter</button>
+    } @else {
+        <p style="color: red;">Pas connecté</p>
+    }
+</div>
