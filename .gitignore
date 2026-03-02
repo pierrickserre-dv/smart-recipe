@@ -6,9 +6,10 @@ venv/
 env/
 
 # --- IDEs ---
-.vscode/
 .idea/
 
 # --- Divers ---
 .DS_Store
 *.log
+
+*.json

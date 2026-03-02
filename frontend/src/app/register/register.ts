@@ -11,15 +11,18 @@ import { AuthService } from '../services/auth';
 export class Register {
   authService = inject(AuthService);
 
-  email ='';
-  password ='';
+  email = '';
+  password = '';
 
   async onSubmit() {
     try {
       await this.authService.register(this.email, this.password);
-      console.log("Tu as bien créé un compte, tu es connecté en tant que : ", this.authService.user());
+      console.log(
+        'Tu as bien créé un compte, tu es connecté en tant que : ',
+        this.authService.user(),
+      );
     } catch (error) {
-      alert("Erreur de register : " + error);
+      alert('Erreur de register : ' + error);
     }
   }
 }

@@ -11,15 +11,15 @@ import { AuthService } from '../services/auth';
 export class Login {
   authService = inject(AuthService);
 
-  email ='';
-  password ='';
+  email = '';
+  password = '';
 
   async onSubmit() {
     try {
       await this.authService.login(this.email, this.password);
-      console.log("Tu es bien connecté en tant que : ", this.authService.user());
+      console.log('Tu es bien connecté en tant que : ', this.authService.user());
     } catch (error) {
-      alert("Erreur de connexion : " + error);
+      alert('Erreur de connexion : ' + error);
     }
   }
 }
