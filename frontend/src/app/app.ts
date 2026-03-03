@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit, effect, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { getIdToken } from '@angular/fire/auth';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
@@ -11,7 +11,7 @@ import { AuthService } from './services/auth';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App {
   messageDuBackend = 'En attente du backend';
   authService = inject(AuthService);
   private http = inject(HttpClient);
@@ -25,8 +25,6 @@ export class App implements OnInit {
       }
     });
   }
-
-  ngOnInit() {}
 
   async appelerLeBackend() {
     try {
