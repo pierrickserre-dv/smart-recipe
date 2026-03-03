@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -6,7 +7,6 @@ import {
   signOut,
   user,
 } from '@angular/fire/auth';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',

@@ -1,6 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, effect, inject } from '@angular/core';
+import { getIdToken } from '@angular/fire/auth';
 import { RouterOutlet } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { Header } from './header/header';
 import { AuthService } from './services/auth';
 
@@ -11,25 +12,39 @@ import { AuthService } from './services/auth';
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-  messageDuBackend = 'En attente du backend...';
-
+  messageDuBackend = 'En attente du backend';
   authService = inject(AuthService);
-
   private http = inject(HttpClient);
 
-  ngOnInit() {
-    this.appelerLeBackend();
+  constructor() {
+    effect(() => {
+      const user = this.authService.user();
+      if (user) {
+        console.log('Utilisateur détecté, appel du backend');
+        this.appelerLeBackend();
+      }
+    });
   }
 
-  appelerLeBackend() {
-    this.http.get<{ message: string }>('http://localhost:8000/').subscribe({
-      next: (data) => {
-        this.messageDuBackend = data.message;
-      },
-      error: (err) => {
-        this.messageDuBackend = 'Erreur·de·connexion·:·';
-        console.error(err);
-      },
-    });
+  ngOnInit() {}
+
+  async appelerLeBackend() {
+    try {
+      const user = this.authService.user();
+      if (!user) return;
+
+      const token = await getIdToken(user);
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+      this.http.get<{ message: string }>('http://localhost:8000', { headers }).subscribe({
+        next: (data) => (this.messageDuBackend = data.message),
+        error: (err) => {
+          this.messageDuBackend = "Erreur d'authentification au backend";
+          console.error(err);
+        },
+      });
+    } catch (error) {
+      console.error('Impossible de récupérer le token', error);
+    }
   }
 }
