@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './auth-guard';
-import { Login } from './login/login';
+import { Login } from './components/login/login';
+import { Register } from './components/register/register';
+import { authGuard } from './core/guards/auth-guard';
+import { loginGuard } from './core/guards/login-guard';
 import { Home } from './pages/home/home';
-import { Register } from './register/register';
+import { Welcome } from './pages/welcome/welcome';
 
 export const routes: Routes = [
   {
@@ -11,15 +13,17 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'login',
-    component: Login,
-  },
-  {
-    path: 'register',
-    component: Register,
+    path: 'welcome',
+    component: Welcome,
+    canActivate: [loginGuard],
+    children: [
+      { path: 'login', component: Login },
+      { path: 'register', component: Register },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+    ],
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'welcome',
   },
 ];

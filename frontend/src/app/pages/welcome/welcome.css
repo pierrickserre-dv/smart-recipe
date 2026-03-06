@@ -1,0 +1,34 @@
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  color: var(--text-gray);
+  background-color: var(--bg-dark); 
+  margin-top: 20px;
+}
+
+
+.body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.content-wrapper {
+  display: flex;
+  flex-direction: row; 
+  justify-content: center;
+  align-items: flex-start;
+  gap: 150px;
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 30px;
+}
+
+.whyjoinus {
+  text-align: left;
+  max-width: 350px;
+}

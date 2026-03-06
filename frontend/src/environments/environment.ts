@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  apiUrl: 'http://localhost:8000',
   firebase: {
     apiKey: 'YOUR-API-KEY',
     authDomain: 'sandbox-pserre.firebaseapp.com',

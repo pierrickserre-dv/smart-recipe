@@ -1,0 +1,16 @@
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="auth-card">
+  <h2>Login to continue</h2>
+  <div class="input-group">
+    <input type="string" formControlName="email" placeholder="Email" />
+    <input type="string" formControlName="password" placeholder="Password" />
+  </div>
+  <button type="submit" class="auth-btn">Login</button>
+  @if (errorMessage()) {
+    <p style="color: #ff4d4d; font-size: 0.9rem; margin-bottom: 10px; text-align: center">
+      {{ errorMessage() }}
+    </p>
+  }
+  <p class="no-account">
+    Don't have an account ? <a class="createaccount-btn" href="/welcome/register">Create Account</a>
+  </p>
+</form>

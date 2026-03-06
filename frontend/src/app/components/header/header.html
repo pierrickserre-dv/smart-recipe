@@ -1,12 +1,12 @@
 <nav class="navbar">
   <div class="logo">
-    <a routerLink="/">Smart Recipe</a>
+    <a style="text-decoration: none; color: var(--text-light)" routerLink="/welcome">Smart Recipe</a>
   </div>
 
   <div class="menu-items">
     @if (!authService.user()) {
-      <a routerLink="/login" class="nav-link">Se connecter</a>
-      <a routerLink="/register" class="nav-link btn-register">Créer un compte</a>
+      <a routerLink="/welcome" class="nav-link">Se connecter</a>
+      <a routerLink="/welcome/register" class="nav-link btn-register">Créer un compte</a>
     } @else {
       <span class="user-email"> {{ authService.user()?.email }}</span>
       <button (click)="authService.logout()" class="btn-logout">Déconnexion</button>

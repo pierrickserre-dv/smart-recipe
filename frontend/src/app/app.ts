@@ -1,9 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, effect, inject } from '@angular/core';
-import { getIdToken } from '@angular/fire/auth';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './header/header';
-import { AuthService } from './services/auth';
+import { Header } from './components/header/header';
+import { AuthService } from './core/services/auth';
 
 @Component({
   selector: 'app-root',
@@ -28,13 +27,7 @@ export class App {
 
   async appelerLeBackend() {
     try {
-      const user = this.authService.user();
-      if (!user) return;
-
-      const token = await getIdToken(user);
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-      this.http.get<{ message: string }>('http://localhost:8000', { headers }).subscribe({
+      this.http.get<{ message: string }>('/api').subscribe({
         next: (data) => (this.messageDuBackend = data.message),
         error: (err) => {
           this.messageDuBackend = "Erreur d'authentification au backend";
