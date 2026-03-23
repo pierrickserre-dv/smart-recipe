@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
-import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +30,7 @@ export class Login {
       console.log('Tu es bien connecté en tant que : ', this.authService.user());
       this.http.get<{ message: string }>('/api/bonjour').subscribe();
       this.router.navigate(['/']);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
         this.errorMessage.set('Email ou mot de passe incorrect.');
       } else {
