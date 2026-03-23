@@ -68,3 +68,10 @@ input {
   outline: none;
   font-weight: 500;
 }
+
+#errorMsg {
+  color: #ff4d4d;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  text-align: center";
+}
