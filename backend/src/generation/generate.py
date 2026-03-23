@@ -1,5 +1,9 @@
+import os
 import vertexai
 from vertexai.generative_models import GenerativeModel
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def generate_recipe(ingredients, project_id="your-project-id", location="us-central1"):
     vertexai.init(project=project_id, location=location)
