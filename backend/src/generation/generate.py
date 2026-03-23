@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def generate_recipe(ingredients, project_id="your-project-id", location="us-central1"):
+def generate_recipe(ingredients, project_id, location):
     vertexai.init(project=project_id, location=location)
     model = GenerativeModel("gemini-1.5-flash")
 
@@ -22,8 +22,11 @@ def generate_recipe(ingredients, project_id="your-project-id", location="us-cent
     return response.text
 
 if __name__ == "__main__":
-    my_ingredients = ["chicken breast", "heavy cream", "spinach", "parmesan cheese", "garlic"]
-    
+    ingredients = ["chicken breast", "heavy cream", "spinach", "parmesan cheese", "garlic"]
+
+    project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+    location = os.getenv("GOOGLE_CLOUD_LOCATION")
+
     print("--- Generating your recipe... ---")
-    recipe = generate_recipe(my_ingredients)
+    recipe = generate_recipe(ingredients, project_id, location)
     print(recipe)
