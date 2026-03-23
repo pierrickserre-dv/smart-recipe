@@ -1,0 +1,18 @@
+# --- Backend / Python ---
+**/__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# --- IDEs ---
+.idea/
+
+# --- Divers ---
+.DS_Store
+*.log
+
+*.json
+
+frontend/src/environments/environment.prod.ts
+frontend/src/environments/environment.local.ts

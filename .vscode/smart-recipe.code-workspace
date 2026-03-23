@@ -1,0 +1,29 @@
+{
+    "folders": [
+        {
+            "name": "root",
+            "path": "../"
+        },
+        {
+            "name": "frontend",
+            "path": "../frontend"
+        },
+        {
+            "name": "backend",
+            "path": "../backend"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/.angular": true,
+            "**/__pycache__": true,
+            "**/.pytest_cache/": true,
+            "frontend/": true,
+            "backend/": true,
+        },
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    }
+}
