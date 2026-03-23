@@ -31,7 +31,12 @@ export class Login {
       this.http.get<{ message: string }>('/api/bonjour').subscribe();
       this.router.navigate(['/']);
     } catch (error: unknown) {
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
+      const firebaseError = error as { code?: string };
+
+      if (
+        firebaseError.code === 'auth/invalid-credential' ||
+        firebaseError.code === 'auth/user-not-found'
+      ) {
         this.errorMessage.set('Email ou mot de passe incorrect.');
       } else {
         this.errorMessage.set('Une erreur est survenue. Réessayez plus tard.');
