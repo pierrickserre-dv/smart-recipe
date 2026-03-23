@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
@@ -15,6 +15,7 @@ export class Register {
   private http = inject(HttpClient);
   private router = inject(Router);
   submitted = false;
+  errorMessage = signal<string | null>(null);
 
   profileForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -28,7 +29,7 @@ export class Register {
       await this.authService.register(email, password);
       this.router.navigate(['/']);
     } catch (error) {
-      alert('Erreur de register : ' + error);
+      console.error(error);
     }
   }
 }
