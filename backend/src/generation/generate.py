@@ -7,7 +7,7 @@ load_dotenv()
 
 def generate_recipe(ingredients, project_id, location):
     vertexai.init(project=project_id, location=location)
-    model = GenerativeModel("gemini-1.5-flash")
+    model = GenerativeModel("gemini-2.5-pro")
 
     prompt = f"""
     I have the following ingredients: {', '.join(ingredients)}.
