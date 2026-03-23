@@ -5,6 +5,10 @@ on:
     paths:
       - "frontend/**"
       - ".github/workflows/frontend.yml"
+  push:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend.yml"
 
 jobs:
   lint:
