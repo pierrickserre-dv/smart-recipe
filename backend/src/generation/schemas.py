@@ -18,10 +18,10 @@ class RecipeResponse(BaseModel):
             return v
             
         allowed = [i.lower() for i in info.context.get("allowed_ingredients", [])]
-        staples = {"sel", "poivre", "huile", "eau", "beurre", "huile d'olive", "ail"}
+        staples = {"salt", "pepper", "oil", "water", "butter", "olive oil", "garlic"}
             
         for ing in v:
             ing_lower = ing.lower()
             if not any(item in ing_lower for item in allowed) and not any(s in ing_lower for s in staples):
-                raise ValueError(f"Ingrédient non autorisé détecté : '{ing}'")
+                raise ValueError(f"Unauthorized ingredient used: '{ing}'")
         return v

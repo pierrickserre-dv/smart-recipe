@@ -15,15 +15,15 @@ app.add_middleware(
 
 @app.get("/bonjour")
 def say_bonjour(user = Depends(get_current_user)):
-    return {"message": "Route privée"}
+    return {"message": "Private route"}
     
 @app.get("/")
 def home():
-    return {"status": "success", "message": "Le backend fonctionne!"}
+    return {"status": "success", "message": "Backend works!"}
 
 @app.get("/hello")
 def say_hello():
-    return {"message": "Route publique"}
+    return {"message": "Public route"}
 
 
 recipe_service = RecipeService()
@@ -37,5 +37,5 @@ async def generate_recipe_endpoint(
         recipe = recipe_service.generate_recipe(request)
         return recipe
     except Exception as e:
-        print(f"Erreur génération : {str(e)}")
-        raise HTTPException(status_code=500, detail="L'IA n'a pas pu générer la recette.")
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail="The AI couldn't generate a recipe.")

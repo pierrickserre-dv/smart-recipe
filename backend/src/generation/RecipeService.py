@@ -37,5 +37,5 @@ class RecipeAIService:
             )
             return validated_recipe
         except Exception as e:
-            print(f"Erreur de conformité ingrédients : {e}")
+            print(f"Error: {e}")
             return recipe_data
