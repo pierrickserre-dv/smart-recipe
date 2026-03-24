@@ -49,12 +49,9 @@ class RecipeAIService:
             print(f"Validation Error: {e}")
             raise e
 
-# --- TESTING BLOCK ---
 if __name__ == "__main__":
-    # 1. Initialize Service
     rs = RecipeAIService()
-    
-    # 2. Prepare Data (Note: Use keyword arguments for Pydantic v2)
+
     ingredients_list = ["chicken breast", "heavy cream", "spinach", "parmesan cheese", "garlic"]
     request_data = RecipeRequest(ingredients=ingredients_list)
     
