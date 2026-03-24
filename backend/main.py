@@ -11,31 +11,22 @@ app.add_middleware(
     allow_origins=["http://localhost:4200"],
     allow_methods=["*"],
     allow_headers=["*"],
-) 
-
-@app.get("/bonjour")
-def say_bonjour(user = Depends(get_current_user)):
-    return {"message": "Route privée"}
-    
-@app.get("/")
-def home():
-    return {"status": "success", "message": "Le backend fonctionne!"}
-
-@app.get("/hello")
-def say_hello():
-    return {"message": "Route publique"}
-
+)
 
 recipe_service = RecipeAIService()
 
+@app.get("/")
+def home():
+    return {"status": "success", "message": "Backend works!"}
+
 @app.post("/generate", response_model=RecipeResponse)
-async def generate_recipe_endpoint(
-    request: RecipeRequest, 
-    user=Depends(get_current_user)
-):
+async def generate_recipe_endpoint(request: RecipeRequest, user=Depends(get_current_user)):
     try:
-        recipe = recipe_service.generate_recipe(request)
-        return recipe
+        recipe_data = recipe_service.generate_recipe(request)
+        # Manually trigger validation if the service returns a dict to catch errors here
+        if isinstance(recipe_data, dict):
+             return RecipeResponse.model_validate(recipe_data, context={"allowed_ingredients": request.ingredients})
+        return recipe_data
     except Exception as e:
-        print(f"Erreur génération : {str(e)}")
-        raise HTTPException(status_code=500, detail="L'IA n'a pas pu générer la recette.")
+        # Test requires "error" in the detail string
+        raise HTTPException(status_code=500, detail=f"Error: The AI couldn't generate a recipe. {str(e)}")
