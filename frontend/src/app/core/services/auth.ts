@@ -38,4 +38,10 @@ export class AuthService {
     this.router.navigate(['/welcome']);
     return signOut(this.auth);
   }
+
+  async getToken(): Promise<string | null> {
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) return null;
+    return await currentUser.getIdToken();
+  }
 }
