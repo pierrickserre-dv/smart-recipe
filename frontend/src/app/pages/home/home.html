@@ -2,4 +2,38 @@
   <header>
     <h1>What are we cooking today?</h1>
   </header>
+
+  <div class="search-section">
+    <div class="search-section">
+      <div class="search-input-field">
+        <span class="sparkle-icon">✨</span>
+        <input
+          #ingredientInput
+          type="text"
+          placeholder="Enter your ingredients..."
+          (keyup.enter)="ajouterIngredient(ingredientInput.value); ingredientInput.value = ''"
+        />
+      </div>
+
+      <button
+        class="btn-add"
+        (click)="ajouterIngredient(ingredientInput.value); ingredientInput.value = ''"
+      >
+        Ajouter
+      </button>
+    </div>
+  </div>
+
+  <div class="panier">
+    @for (ing of selectedIngredients; track $index) {
+      <div class="ingredient-badge">
+        <span>{{ ing }}</span>
+        <button class="btn-remove" (click)="supprimerIngredient($index)">×</button>
+      </div>
+    }
+  </div>
+
+  <div class="recipe">
+    <app-generation [ingredients]="selectedIngredients"></app-generation>
+  </div>
 </div>
