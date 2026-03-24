@@ -1,2 +1,10 @@
-vertexai
+# --- Core Application ---
+fastapi[all]
+google-genai
+firebase-admin
 python-dotenv
+
+# --- Testing Suite ---
+pytest
+pytest-mock
+httpx
