@@ -23,8 +23,8 @@ class RecipeAIService:
     def generate_recipe(self, data: RecipeRequest) -> RecipeResponse:
         prompt = (
             f"I have these ingredients: {', '.join(data.ingredients)}. "
-            "Create a creative recipe using ONLY these plus salt, pepper, oil, butter, water, olive oil and/or garlic. "
-            "Utilize your adaptive thinking to ensure no extra ingredients are added to the list or instructions."
+            "Create a creative recipe using ONLY these plus salt, pepper (not black pepper, just pepper), oil, butter, water, olive oil and/or garlic. "
+            "Utilize your adaptive thinking to ensure NO extra ingredients are added to the list or instructions."
         )
 
         response = self.client.models.generate_content(
@@ -32,7 +32,8 @@ class RecipeAIService:
             contents=prompt, 
             config=types.GenerateContentConfig(
                 response_mime_type='application/json', 
-                response_schema=RecipeResponse
+                response_schema=RecipeResponse,
+                temperature=0.1
             )
         )
 
