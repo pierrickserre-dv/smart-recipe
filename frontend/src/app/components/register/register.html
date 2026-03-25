@@ -5,7 +5,7 @@
     @if (profileForm.get('email')?.touched && profileForm.get('email')?.errors?.['email']) {
       <p style="color: red; font-size: 0.8rem">Invalid email</p>
     }
-    <input type="string" formControlName="password" placeholder="Password" />
+    <input type="password" formControlName="password" placeholder="Password" />
     @if (
       profileForm.get('password')?.touched && profileForm.get('password')?.errors?.['minlength']
     ) {
