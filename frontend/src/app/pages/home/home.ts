@@ -11,13 +11,13 @@ import { Generation } from '../../components/generation/generation';
 export class Home {
   selectedIngredients: string[] = [];
 
-  ajouterIngredient(nom: string) {
+  addIngredient(nom: string) {
     if (nom && !this.selectedIngredients.includes(nom)) {
       this.selectedIngredients = [...this.selectedIngredients, nom];
     }
   }
 
-  supprimerIngredient(index: number) {
+  deleteIngredient(index: number) {
     this.selectedIngredients.splice(index, 1);
   }
 }

@@ -1,8 +1,10 @@
 # --- Core Application ---
 fastapi[all]
+uvicorn
 google-genai
 firebase-admin
 python-dotenv
+pydantic
 
 # --- Testing Suite ---
 pytest

@@ -26,7 +26,7 @@ export class Generation {
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Erreur lors de la génération', err);
+        console.error('Error during generation', err);
         this.isLoading.set(false);
       },
     });
