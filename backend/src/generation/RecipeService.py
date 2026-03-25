@@ -1,7 +1,6 @@
 import os
 from google import genai
 from google.genai import types
-# Ensure the import works whether running directly or as a package
 try:
     from .schemas import RecipeRequest, RecipeResponse
 except ImportError:
@@ -9,7 +8,7 @@ except ImportError:
 
 class RecipeAIService:
     def __init__(self):
-        # Fallback to sandbox-pserre if env var is not set
+        
         project_id = os.getenv("GOOGLE_CLOUD_PROJECT", "sandbox-pserre")
         
         self.client = genai.Client(
@@ -17,7 +16,7 @@ class RecipeAIService:
             project=project_id, 
             location="us-central1"
         )
-        # Verify this model ID exists in your Vertex AI region
+        
         self.model_id = "gemini-2.5-flash" 
 
     def generate_recipe(self, data: RecipeRequest) -> RecipeResponse:
@@ -40,7 +39,6 @@ class RecipeAIService:
         recipe_data = response.parsed
 
         try:
-            # model_dump() converts the Pydantic object back to a dict so we can re-validate with context
             validated_recipe = RecipeResponse.model_validate(
                 recipe_data.model_dump(), 
                 context={"allowed_ingredients": data.ingredients}

@@ -3,7 +3,6 @@ from pydantic import BaseModel, field_validator, ValidationInfo, Field
 from typing import List
 
 class RecipeRequest(BaseModel):
-    # Set a reasonable limit (e.g., 50 ingredients) to prevent 500 errors
     ingredients: List[str] = Field(..., min_length=1, max_length=50)
 
 class RecipeResponse(BaseModel):
@@ -22,7 +21,6 @@ class RecipeResponse(BaseModel):
         
         for ing in v:
             ing_lower = ing.lower().strip()
-            # Strict Check: It must be a staple OR contain one of the user's allowed items
             is_staple = ing_lower in staples
             is_allowed = any(item in ing_lower for item in allowed if item)
             
@@ -44,7 +42,6 @@ class RecipeResponse(BaseModel):
 
         for word in words_in_instructions:
             if word in forbidden_pool and word not in all_authorized:
-                # Check if it's a hidden part of an authorized multi-word string
                 if not any(word in auth for auth in all_authorized):
                     raise ValueError(f"AI hallucinated ingredient in instructions: '{word}'")
         return v
