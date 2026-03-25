@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration local",
     "test": "ng test",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
   },
   "prettier": {
     "printWidth": 100,
@@ -31,6 +32,7 @@
     "@angular/fire": "^20.0.1",
     "@angular/forms": "^21.1.0",
     "@angular/platform-browser": "^21.1.0",
+    "@angular/platform-browser-dynamic": "^21.1.0",
     "@angular/router": "^21.1.0",
     "firebase": "^12.9.0",
     "rxjs": "~7.8.0",
@@ -50,5 +52,20 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "8.50.1",
     "vitest": "^4.0.8"
+  },
+  "overrides": {
+    "@angular/fire": {
+      "@angular/common": "$@angular/common",
+      "@angular/core": "$@angular/core",
+      "@angular/platform-browser": "$@angular/platform-browser",
+      "@angular/platform-browser-dynamic": "$@angular/platform-browser-dynamic"
+    },
+    "@angular/platform-browser-dynamic": {
+      "@angular/core": "$@angular/core",
+      "@angular/common": "$@angular/common"
+    },
+    "@eslint/js": {
+      "eslint": "$eslint"
+    }
   }
 }
