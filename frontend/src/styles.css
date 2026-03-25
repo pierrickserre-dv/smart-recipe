@@ -1,10 +1,12 @@
 :root {
   --primary-emerald: #50c878;
+  --primary-emerald-light: #45cf7a;
   --bg-dark: #121212;
   --text-light: #f9fafb;
   --card-bg: #1a1a1a;
   --text-gray: #a8a8a8;
   --border-grey: #2c2c2c;
+  --red: #ff4d4d;
 }
 
 body {
