@@ -24,7 +24,7 @@ class RecipeAIService:
             f"I have these ingredients: {', '.join(data.ingredients)}. "
             "Create a creative recipe using ONLY these plus salt, pepper (not black pepper, just pepper), oil, butter, water, olive oil and/or garlic. "
             "Utilize your adaptive thinking to ensure NO extra ingredients are added to the list or instructions."
-            "If an 'ingredient' prodived does not exist, do NOT use it. If an ingredient exists but is spelled wrong, you can use it, but write it as it should be in your output."
+            "If an 'ingredient' prodived does not exist, do NOT use it. If an ingredient exists but is spelled wrong, you can use it."
         )
 
         response = self.client.models.generate_content(
