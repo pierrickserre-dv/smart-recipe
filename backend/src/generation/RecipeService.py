@@ -28,6 +28,8 @@ class RecipeAIService:
             "and/or garlic."
             "Utilize your adaptive thinking to ensure NO extra ingredients"
             "are added to the list or instructions."
+            "If an 'ingredient' prodived does not exist, do NOT use it. "
+            "If an ingredient exists but is spelled wrong, you can use it."
         )
 
         response = self.client.models.generate_content(
