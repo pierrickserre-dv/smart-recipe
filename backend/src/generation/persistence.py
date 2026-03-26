@@ -18,14 +18,3 @@ class FirestoreService:
 
         _, doc_ref = user_recipes_ref.add(recipe_data)
         return doc_ref.id
-
-    async def delete_recipe_for_user(self, user_id: str, recipe_id: str):
-        doc_ref = (
-            self.db.collection("users")
-            .document(user_id)
-            .collection("recipes")
-            .document(recipe_id)
-        )
-
-        doc_ref.delete()
-        return doc_ref

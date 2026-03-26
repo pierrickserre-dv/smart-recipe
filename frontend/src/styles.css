@@ -7,6 +7,7 @@
   --text-gray: #a8a8a8;
   --border-grey: #2c2c2c;
   --red: #ff4d4d;
+  --error-red: red;
 }
 
 body {

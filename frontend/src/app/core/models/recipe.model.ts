@@ -9,3 +9,9 @@ export interface RecipeResponse {
   ingredients_used: string[];
   instructions: string[];
 }
+
+export interface SaveRecipeResponse {
+  status: string;
+  message: string;
+  id: string;
+}
