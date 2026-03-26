@@ -13,6 +13,7 @@ export class Generation {
 
   recipe = signal<RecipeResponse | null>(null);
   isLoading = signal<boolean>(false);
+  isSaving = signal<boolean>(false);
 
   private recipeService = inject(RecipeService);
 
@@ -30,5 +31,24 @@ export class Generation {
         this.isLoading.set(false);
       },
     });
+  }
+
+  onSave() {
+    this.isSaving.set(true);
+    const currentRecipe = this.recipe();
+    if (currentRecipe) {
+      this.isSaving.set(true);
+
+      this.recipeService.saveRecipe(currentRecipe).subscribe({
+        next: (response) => {
+          console.log('Recette sauvegardée avec ID: ', response.id);
+          this.isSaving.set(false);
+        },
+        error: (err) => {
+          console.error('Erreur lors de la sauvegarde ', err);
+          this.isSaving.set(false);
+        },
+      });
+    }
   }
 }

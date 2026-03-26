@@ -11,4 +11,8 @@ export class RecipeService {
   generateRecipe(ingredients: string[]): Observable<RecipeResponse> {
     return this.http.post<RecipeResponse>(this.apiUrl, { ingredients });
   }
+
+  saveRecipe(recipe: RecipeResponse): Observable<any> {
+    return this.http.post<any>('/api/save', recipe);
+  }
 }
