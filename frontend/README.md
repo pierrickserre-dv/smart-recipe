@@ -1,59 +1,137 @@
-# SmartRecipeFront
+# Smart Recipe AI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.5.
+**Smart Recipe AI** est une application web moderne qui utilise l'intelligence artificielle pour transformer vos ingrédients restants en recettes gastronomiques. Le projet repose sur une architecture découplée avec un backend FastAPI et un frontend Angular, intégrant les technologies Google Cloud (Gemini) et Firebase.
 
-## Development server
+---
 
-To start a local development server, run:
+## Fonctionnalités
+
+* **Authentification Sécurisée** : Inscription et connexion gérées par Firebase Auth (Tokens JWT).
+* **Gestion Dynamique des Ingrédients** : Interface fluide pour ajouter et supprimer vos ingrédients en temps réel.
+* **Génération de Recettes par IA** : Utilisation de **Gemini 2.5 Flash** pour créer des recettes complètes (Titre, Temps, Difficulté, Ingrédients, Instructions).
+* **Régénération Intelligente** : Possibilité de générer une nouvelle variante de recette sans modifier votre sélection d'ingrédients, même si le panier est vidé.
+* **Expérience Utilisateur (UX)** : Design "Dark Mode" épuré avec des composants réactifs, animations fluides et boutons contextuels.
+
+---
+
+## 🛠 Stack Technique
+
+### Backend
+
+* **Framework** : FastAPI (Python 3.12)
+* **IA** : Google GenAI SDK (Modèle : `gemini-2.5-flash`)
+* **Sécurité** : Firebase Admin SDK (Vérification des Tokens en header via Interceptor)
+* **Serveur** : Uvicorn
+
+### Frontend
+
+* **Framework** : Angular 21.1.5 (Signals, Standalone Components)
+* **Authentification** : Firebase Auth
+* **Design** : CSS3 moderne (Flexbox, CSS Variables, Animations @keyframes)
+
+---
+
+## Installation et Configuration
+
+### 1. Configuration du Backend
+
+**Prérequis** : Python 3.12+ et le SDK Google Cloud installé.
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # Sur Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+#### Variables d'environnement (.env)
+
+Créez un fichier `.env` dans le dossier `/backend` :
+
+```env
+GOOGLE_CLOUD_PROJECT=votre-projet-id
+GOOGLE_CLOUD_LOCATION=votre-region
+```
+
+> **Note** : Assurez-vous d'avoir exécuté `gcloud auth application-default login` dans votre terminal pour l'accès à Gemini.
+
+#### Lancement
+
+```bash
+python -m uvicorn main:app --reload
+```
+
+---
+
+### 2. Configuration du Frontend
+
+**Prérequis** : Node.js et Angular CLI installés.
+
+```bash
+cd frontend
+npm install
+```
+
+#### Environnement
+
+Configurez vos clés Firebase dans `src/environments/environment.local.ts` :
+
+```ts
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: "VOTRE_API_KEY",
+    authDomain: "VOTRE_AUTH_DOMAIN",
+    projectId: "VOTRE_PROJECT_ID",
+    storageBucket: "VOTRE_STORAGE_BUCKET",
+    messagingSenderId: "VOTRE_SENDER_ID",
+    appId: "VOTRE_APP_ID"
+  }
+};
+```
+
+#### Lancement
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Architecture et Workflow Git
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Le projet utilise un système de branches par fonctionnalité pour garantir la stabilité du code :
 
-```bash
-ng generate component component-name
-```
+* `main` : Branche stable de production.
+* `feat/auth` : Authentification et sécurité Firebase.
+* `feat/recipe-generation-frontend` : Logique d'interface et intégration de la génération.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Astuce Git (Changement de branche avec modifications en cours)
 
 ```bash
-ng build
+git stash        # Sauvegarde temporaire des modifications non commitées
+git checkout <nom-de-la-branche>
+git stash pop    # Restauration des modifications sur la nouvelle branche
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Tests Backend
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Suite de tests automatisés avec Pytest :
 
 ```bash
-ng test
+cd backend
+pytest
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Roadmap
 
-```bash
-ng e2e
-```
+* [ ] Persistance des recettes générées dans Firebase Firestore.
+* [ ] Ajout de filtres par régimes alimentaires (Végétarien, Sans Gluten, Allergies).
+* [ ] Exportation des recettes au format PDF.
+* [ ] Système de notation et de sauvegarde des recettes préférées.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
