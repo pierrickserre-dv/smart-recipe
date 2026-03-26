@@ -1,9 +1,20 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
 from fastapi.testclient import TestClient
 
 from main import app
 from src.auth.dependencies import get_current_user
 from src.generation.schemas import RecipeResponse
+
+
+@pytest.fixture(autouse=True)
+def mock_google_cloud():
+    with patch("google.auth.default", return_value=(MagicMock(), "project-id")):
+        with patch("google.cloud.firestore.Client"):
+            with patch("firebase_admin.auth.verify_id_token"):
+                yield
+
 
 client = TestClient(app)
 
