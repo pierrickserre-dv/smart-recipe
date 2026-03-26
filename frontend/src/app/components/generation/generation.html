@@ -1,12 +1,25 @@
 <div class="generation-container">
   @if (recipe()) {
     <div class="actions-container">
-      <button class="save-button" (click)="onSave()" [disabled]="isSaving()">
-        @if (!isSaving()) {
-          <span>💾</span>
-        }
+      <button
+        class="save-button"
+        [class.saved]="isSaved()"
+        (click)="onSave()"
+        [disabled]="isSaving() || isSaved()"
+      >
+        <span>
+          @if (isSaved()) {
+            ✅
+          } @else if (!isSaving()) {
+            💾
+          }
+        </span>
 
-        {{ isSaving() ? 'Enregistrement...' : 'Enregistrer la recette' }}
+        @if (isSaved()) {
+          Already saved
+        } @else {
+          {{ isSaving() ? 'Loading...' : 'Save recipe' }}
+        }
       </button>
     </div>
   }

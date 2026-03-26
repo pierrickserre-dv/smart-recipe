@@ -48,6 +48,17 @@
   margin-bottom: 20px;
 }
 
+.save-button.saved {
+  border-color: var(--primary-emerald);
+  color: var(--primary-emerald);
+  background: rgba(16, 185, 129, 0.1);
+  cursor: default;
+}
+
+.save-button:active {
+  transform: scale(0.98);
+}
+
 .recipe-card {
   background: var(--bg-dark);
   color: var(--text-light);
