@@ -35,12 +35,37 @@ Frontend :
 
 - src/app/components/generation/generation.ts : generateImage()
 
+- src/app/components/generation/generation.html : affichage de l'image (ligne 30 et suite)
 
 
-Points to know better : 
+USER STORY : GET ALTERNATIVES
 
-Observable
+Backend :
 
-.subscribe()
+- src/generation/RecipeService.py : suggest_alternatives()
 
-next
+- src/generation/schemas.py : AlternativesRequest, IngredientAlternative, AlternativesResponse
+
+- main.py : POST /alternatives
+
+Frontend : 
+
+- src/app/core/services/recipe.service.ts : getAlternatives()
+
+- src/app/components/generation/generation.ts : 
+
+    selectedIngredients : attribut
+    toggleIngredient()
+    isIngredientSelected()
+    onGetAlternatives()
+    applyNewRecipe()
+
+- src/app/components/generation/generation.html :
+
+    selected ingredients - ligne 68
+    alternatives - ligne 98
+
+- src/app/components/generation/generation.css :
+
+    btn-alternatives - ligne 217
+    alternatives section - ligne 279
