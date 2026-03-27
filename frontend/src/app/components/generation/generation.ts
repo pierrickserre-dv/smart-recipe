@@ -1,8 +1,14 @@
-import { Component, effect, EventEmitter, inject, Input, Output, signal, untracked } from '@angular/core';
 import {
-  AlternativesResponse,
-  RecipeResponse,
-} from '../../core/models/recipe.model';
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+  untracked,
+} from '@angular/core';
+import { AlternativesResponse, RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
 @Component({

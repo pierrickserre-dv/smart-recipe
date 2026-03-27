@@ -57,7 +57,10 @@
               <li
                 class="ing-item"
                 [class.selected]="isIngredientSelected(ing)"
+                tabindex="0"
+                role="button"
                 (click)="toggleIngredient(ing)"
+                (keyup.enter)="toggleIngredient(ing)"
               >
                 <span class="check">{{ isIngredientSelected(ing) ? '⟳' : '✓' }}</span>
                 {{ ing }}
@@ -118,9 +121,7 @@
             <span class="tag">⏱ {{ alternatives()?.new_recipe?.prep_time }}</span>
             <span class="tag">📊 {{ alternatives()?.new_recipe?.difficulty }}</span>
           </div>
-          <button class="btn-apply" (click)="applyNewRecipe()">
-            Use this recipe
-          </button>
+          <button class="btn-apply" (click)="applyNewRecipe()">Use this recipe</button>
         </div>
       </div>
     }

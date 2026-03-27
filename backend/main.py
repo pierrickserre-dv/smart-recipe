@@ -77,9 +77,7 @@ def generate_image(request: ImageRequest, user=Depends(get_current_user)):
 
 
 @app.post("/alternatives", response_model=AlternativesResponse)
-def get_alternatives(
-    request: AlternativesRequest, user=Depends(get_current_user)
-):
+def get_alternatives(request: AlternativesRequest, user=Depends(get_current_user)):
     try:
         return recipe_service.suggest_alternatives(request)
     except Exception as e:

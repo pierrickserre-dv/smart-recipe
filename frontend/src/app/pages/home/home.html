@@ -72,7 +72,10 @@
             <div
               class="history-card"
               [class.expanded]="expandedRecipeId() === recipe.id"
+              tabindex="0"
+              role="button"
               (click)="toggleRecipe(recipe.id)"
+              (keyup.enter)="toggleRecipe(recipe.id)"
             >
               <div class="history-card-header">
                 <h3>{{ recipe.title }}</h3>
@@ -86,7 +89,13 @@
               </div>
 
               @if (expandedRecipeId() === recipe.id) {
-                <div class="history-card-body" (click)="$event.stopPropagation()">
+                <div
+                  class="history-card-body"
+                  tabindex="0"
+                  role="region"
+                  (click)="$event.stopPropagation()"
+                  (keyup.enter)="$event.stopPropagation()"
+                >
                   <div class="history-ingredients">
                     <h4>Ingredients</h4>
                     <ul>

@@ -90,9 +90,7 @@ class RecipeAIService:
         image_bytes = response.generated_images[0].image.image_bytes
         return base64.b64encode(image_bytes).decode("utf-8"), "image/jpeg"
 
-    def suggest_alternatives(
-        self, data: AlternativesRequest
-    ) -> AlternativesResponse:
+    def suggest_alternatives(self, data: AlternativesRequest) -> AlternativesResponse:
         """Suggest alternative ingredients and generate a new recipe."""
         original = data.original_recipe
         selected = data.selected_ingredients
@@ -109,19 +107,19 @@ class RecipeAIService:
             "each replaced ingredient. The recipe should be coherent and "
             "delicious.\n\n"
             "Return a JSON object with this exact structure:\n"
-            '{\n'
+            "{\n"
             '  "suggestions": [\n'
             '    {"original": "ingredient_name", '
             '"alternatives": ["alt1", "alt2", "alt3"]}\n'
-            '  ],\n'
+            "  ],\n"
             '  "new_recipe": {\n'
             '    "title": "...",\n'
             '    "prep_time": "...",\n'
             '    "difficulty": "...",\n'
             '    "ingredients_used": ["..."],\n'
             '    "instructions": ["step1", "step2", ...]\n'
-            '  }\n'
-            '}'
+            "  }\n"
+            "}"
         )
 
         response = self.client.models.generate_content(
