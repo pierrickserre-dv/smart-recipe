@@ -1,4 +1,4 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, effect, inject, Input, signal, untracked } from '@angular/core';
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
@@ -13,8 +13,20 @@ export class Generation {
 
   recipe = signal<RecipeResponse | null>(null);
   isLoading = signal<boolean>(false);
+  isSaving = signal<boolean>(false);
+  isSaved = signal<boolean>(false);
 
   private recipeService = inject(RecipeService);
+
+  constructor() {
+    effect(() => {
+      this.recipe();
+
+      untracked(() => {
+        this.isSaved.set(false);
+      });
+    });
+  }
 
   onGenerate() {
     this.isLoading.set(true);
@@ -30,5 +42,26 @@ export class Generation {
         this.isLoading.set(false);
       },
     });
+  }
+
+  onSave() {
+    this.isSaving.set(true);
+
+    const currentRecipe = this.recipe();
+    if (currentRecipe && !this.isSaved()) {
+      this.isSaving.set(true);
+      this.isSaved.set(true);
+
+      this.recipeService.saveRecipe(currentRecipe).subscribe({
+        next: (response) => {
+          console.log('Recette sauvegardée avec ID: ', response.id);
+          this.isSaving.set(false);
+        },
+        error: (err) => {
+          console.error('Erreur lors de la sauvegarde ', err);
+          this.isSaving.set(false);
+        },
+      });
+    }
   }
 }

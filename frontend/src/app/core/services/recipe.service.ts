@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RecipeResponse } from '../models/recipe.model';
+import { RecipeResponse, SaveRecipeResponse } from '../models/recipe.model';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
@@ -10,5 +10,9 @@ export class RecipeService {
 
   generateRecipe(ingredients: string[]): Observable<RecipeResponse> {
     return this.http.post<RecipeResponse>(this.apiUrl, { ingredients });
+  }
+
+  saveRecipe(recipe: RecipeResponse): Observable<SaveRecipeResponse> {
+    return this.http.post<SaveRecipeResponse>('/api/save', recipe);
   }
 }
