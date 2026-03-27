@@ -22,7 +22,7 @@ class FirestoreService:
 
         recipe_data["created_at"] = firestore.SERVER_TIMESTAMP
 
-        await user_recipes_ref.set(recipe_data, merge=True)
+        user_recipes_ref.set(recipe_data, merge=True)
         return recipe_id
 
     async def delete_recipe_for_user(self, user_id: str, recipe_id: str):
@@ -33,15 +33,14 @@ class FirestoreService:
             .document(recipe_id)
         )
 
-        await user_recipes_ref.delete()
+        user_recipes_ref.delete()
 
     async def get_recipes(self, user_id: str):
-        recipes = []
-        user_recipes_ref = (
+        docs = (
             self.db.collection("users").document(user_id).collection("recipes").stream()
         )
-
-        for doc in user_recipes_ref:
+        recipes = []
+        for doc in docs:
             recipe_data = doc.to_dict()
             recipe_data["id"] = doc.id
             recipes.append(recipe_data)

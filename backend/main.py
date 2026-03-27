@@ -43,7 +43,7 @@ async def generate_recipe_endpoint(
         )
 
 
-@app.post("/save")
+@app.post("/recipe")
 async def save_recipe(request: RecipeResponse, user: User = Depends(get_current_user)):
     try:
         recipe_id = await firestore.save_recipe_for_user(user.uid, request)
