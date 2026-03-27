@@ -5,7 +5,15 @@ from src.auth.dependencies import get_current_user
 from src.auth.schemas import User
 from src.generation.persistence import FirestoreService
 from src.generation.RecipeService import RecipeAIService
-from src.generation.schemas import RecipeRequest, RecipeResponse
+from src.generation.schemas import (
+    AlternativesRequest,
+    AlternativesResponse,
+    ImageRequest,
+    ImageResponse,
+    RecipeRequest,
+    RecipeResponse,
+    SavedRecipe,
+)
 
 app = FastAPI()
 
@@ -25,6 +33,18 @@ def home():
     return {"status": "success", "message": "Backend works!"}
 
 
+@app.get("/recipes", response_model=list[SavedRecipe])
+def get_recipes(user: User = Depends(get_current_user)):
+    try:
+        return firestore.get_user_recipes(user.uid)
+    except Exception as e:
+        print(f"DEBUG: Firestore Error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while fetching recipes.",
+        )
+
+
 @app.post("/generate", response_model=RecipeResponse)
 async def generate_recipe_endpoint(
     request: RecipeRequest, user=Depends(get_current_user)
@@ -40,6 +60,33 @@ async def generate_recipe_endpoint(
         raise HTTPException(
             status_code=500,
             detail=f"Error: The AI couldn't generate a recipe. {str(e)}",
+        )
+
+
+@app.post("/generate-image", response_model=ImageResponse)
+def generate_image(request: ImageRequest, user=Depends(get_current_user)):
+    try:
+        image_base64, mime_type = recipe_service.generate_image(request.title)
+        return ImageResponse(image_base64=image_base64, mime_type=mime_type)
+    except Exception as e:
+        print(f"DEBUG: Image generation error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while generating the recipe image.",
+        )
+
+
+@app.post("/alternatives", response_model=AlternativesResponse)
+def get_alternatives(
+    request: AlternativesRequest, user=Depends(get_current_user)
+):
+    try:
+        return recipe_service.suggest_alternatives(request)
+    except Exception as e:
+        print(f"DEBUG: Alternatives error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while generating alternatives.",
         )
 
 

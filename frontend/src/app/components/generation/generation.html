@@ -23,9 +23,24 @@
       </button>
     </div>
   }
+
   @if (recipe() && !isLoading()) {
     <div class="recipe-card">
       <header class="recipe-header">
+        @if (isLoadingImage()) {
+          <div class="image-placeholder">
+            <span class="spinner"></span>
+            <p>Generating preview...</p>
+          </div>
+        } @else if (imageBase64()) {
+          <div class="recipe-image-wrapper">
+            <img
+              [src]="'data:' + imageMimeType() + ';base64,' + imageBase64()"
+              [alt]="recipe()?.title"
+              class="recipe-image"
+            />
+          </div>
+        }
         <h2>{{ recipe()?.title }}</h2>
         <div class="meta-tags">
           <span class="tag"><i class="icon">⏱</i> {{ recipe()?.prep_time }}</span>
@@ -36,11 +51,34 @@
       <div class="recipe-content">
         <aside class="ingredients-sidebar">
           <h3>Ingredients</h3>
+          <p class="ingredients-hint">Click an ingredient to select it for substitution</p>
           <ul class="ing-list">
             @for (ing of recipe()?.ingredients_used; track $index) {
-              <li><span class="check">✓</span> {{ ing }}</li>
+              <li
+                class="ing-item"
+                [class.selected]="isIngredientSelected(ing)"
+                (click)="toggleIngredient(ing)"
+              >
+                <span class="check">{{ isIngredientSelected(ing) ? '⟳' : '✓' }}</span>
+                {{ ing }}
+              </li>
             }
           </ul>
+
+          @if (selectedIngredients().size > 0) {
+            <button
+              class="btn-alternatives"
+              (click)="onGetAlternatives()"
+              [disabled]="isLoadingAlternatives()"
+            >
+              @if (isLoadingAlternatives()) {
+                <span class="spinner-small"></span>
+                Finding alternatives...
+              } @else {
+                Suggest alternatives ({{ selectedIngredients().size }})
+              }
+            </button>
+          }
         </aside>
 
         <main class="instructions-main">
@@ -56,5 +94,35 @@
         </main>
       </div>
     </div>
+
+    @if (alternatives()) {
+      <div class="alternatives-section">
+        <h3>Alternative ingredients</h3>
+        <div class="alternatives-grid">
+          @for (suggestion of alternatives()?.suggestions; track suggestion.original) {
+            <div class="alternative-card">
+              <div class="original-ingredient">{{ suggestion.original }}</div>
+              <div class="alternatives-list">
+                @for (alt of suggestion.alternatives; track $index) {
+                  <span class="alt-badge">{{ alt }}</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="new-recipe-preview">
+          <h4>New recipe suggestion</h4>
+          <p class="new-recipe-title">{{ alternatives()?.new_recipe?.title }}</p>
+          <div class="new-recipe-meta">
+            <span class="tag">⏱ {{ alternatives()?.new_recipe?.prep_time }}</span>
+            <span class="tag">📊 {{ alternatives()?.new_recipe?.difficulty }}</span>
+          </div>
+          <button class="btn-apply" (click)="applyNewRecipe()">
+            Use this recipe
+          </button>
+        </div>
+      </div>
+    }
   }
 </div>

@@ -161,3 +161,151 @@ input:focus {
   border-top: 1px solid var(--border-grey);
   margin: 40px 0;
 }
+
+/* Recipe history */
+
+.history-section {
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 60px;
+  padding: 0 20px 40px;
+}
+
+.history-section h2 {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.history-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-gray);
+  padding: 40px 0;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.history-card {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-grey);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.history-card:hover {
+  border-color: var(--primary-emerald);
+  box-shadow: 0 0 20px rgba(80, 200, 120, 0.08);
+}
+
+.history-card.expanded {
+  grid-column: 1 / -1;
+  cursor: default;
+}
+
+.history-card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin: 0 0 10px;
+}
+
+.history-card-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tag-small {
+  font-size: 0.78rem;
+  color: var(--text-gray);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.history-date {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--text-gray);
+  opacity: 0.7;
+}
+
+.history-card-body {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  border-top: 1px solid var(--border-grey);
+  padding-top: 20px;
+}
+
+@media (max-width: 640px) {
+  .history-card-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.history-card-body h4 {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin: 0 0 12px;
+}
+
+.history-ingredients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-ingredients li {
+  color: var(--text-gray);
+  margin-bottom: 8px;
+  display: flex;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.history-instructions ol {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.history-instructions li {
+  color: var(--text-gray);
+  margin-bottom: 10px;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.check {
+  color: var(--primary-emerald);
+  font-weight: bold;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-grey);
+  border-top-color: var(--primary-emerald);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

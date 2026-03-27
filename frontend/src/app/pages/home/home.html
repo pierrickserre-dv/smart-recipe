@@ -50,6 +50,65 @@
   </div>
 
   <div class="recipe-display">
-    <app-generation #generation [ingredients]="selectedIngredients"></app-generation>
+    <app-generation
+      #generation
+      [ingredients]="selectedIngredients"
+      (recipeSaved)="loadRecentRecipes()"
+    ></app-generation>
   </div>
+
+  @if (recentRecipes().length > 0 || isLoadingHistory()) {
+    <section class="history-section">
+      <h2>Your recent recipes</h2>
+
+      @if (isLoadingHistory()) {
+        <div class="history-loading">
+          <span class="spinner"></span>
+          <p>Loading your recipes...</p>
+        </div>
+      } @else {
+        <div class="history-grid">
+          @for (recipe of recentRecipes(); track recipe.id) {
+            <div
+              class="history-card"
+              [class.expanded]="expandedRecipeId() === recipe.id"
+              (click)="toggleRecipe(recipe.id)"
+            >
+              <div class="history-card-header">
+                <h3>{{ recipe.title }}</h3>
+                <div class="history-card-meta">
+                  <span class="tag-small">⏱ {{ recipe.prep_time }}</span>
+                  <span class="tag-small">📊 {{ recipe.difficulty }}</span>
+                </div>
+                @if (recipe.created_at) {
+                  <span class="history-date">{{ recipe.created_at | date: 'mediumDate' }}</span>
+                }
+              </div>
+
+              @if (expandedRecipeId() === recipe.id) {
+                <div class="history-card-body" (click)="$event.stopPropagation()">
+                  <div class="history-ingredients">
+                    <h4>Ingredients</h4>
+                    <ul>
+                      @for (ing of recipe.ingredients_used; track $index) {
+                        <li><span class="check">✓</span> {{ ing }}</li>
+                      }
+                    </ul>
+                  </div>
+                  <div class="history-instructions">
+                    <h4>Instructions</h4>
+                    <ol>
+                      @for (step of recipe.instructions; track $index) {
+                        <li>{{ step }}</li>
+                      }
+                    </ol>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
 </div>

@@ -1,5 +1,6 @@
 import re
-from typing import List
+from datetime import datetime
+from typing import List, Optional
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
@@ -86,3 +87,37 @@ class RecipeResponse(BaseModel):
                         f"AI hallucinated ingredient in instructions: '{word}'"
                     )
         return v
+
+
+class SavedRecipe(BaseModel):
+    id: str
+    title: str
+    prep_time: str
+    difficulty: str
+    ingredients_used: List[str]
+    instructions: List[str]
+    created_at: Optional[str] = None
+
+
+class ImageRequest(BaseModel):
+    title: str
+
+
+class ImageResponse(BaseModel):
+    image_base64: str
+    mime_type: str
+
+
+class AlternativesRequest(BaseModel):
+    selected_ingredients: List[str] = Field(..., min_length=1)
+    original_recipe: RecipeResponse
+
+
+class IngredientAlternative(BaseModel):
+    original: str
+    alternatives: List[str]
+
+
+class AlternativesResponse(BaseModel):
+    suggestions: List[IngredientAlternative]
+    new_recipe: RecipeResponse

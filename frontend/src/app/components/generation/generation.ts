@@ -1,5 +1,8 @@
-import { Component, effect, inject, Input, signal, untracked } from '@angular/core';
-import { RecipeResponse } from '../../core/models/recipe.model';
+import { Component, effect, EventEmitter, inject, Input, Output, signal, untracked } from '@angular/core';
+import {
+  AlternativesResponse,
+  RecipeResponse,
+} from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
 @Component({
@@ -10,20 +13,31 @@ import { RecipeService } from '../../core/services/recipe.service';
 })
 export class Generation {
   @Input() ingredients: string[] = [];
+  @Output() recipeSaved = new EventEmitter<void>();
 
   recipe = signal<RecipeResponse | null>(null);
-  isLoading = signal<boolean>(false);
-  isSaving = signal<boolean>(false);
-  isSaved = signal<boolean>(false);
+  isLoading = signal(false);
+  isSaving = signal(false);
+  isSaved = signal(false);
+
+  imageBase64 = signal<string | null>(null);
+  imageMimeType = signal<string>('image/jpeg');
+  isLoadingImage = signal(false);
+
+  selectedIngredients = signal<Set<string>>(new Set());
+  alternatives = signal<AlternativesResponse | null>(null);
+  isLoadingAlternatives = signal(false);
 
   private recipeService = inject(RecipeService);
 
   constructor() {
     effect(() => {
       this.recipe();
-
       untracked(() => {
         this.isSaved.set(false);
+        this.imageBase64.set(null);
+        this.selectedIngredients.set(new Set());
+        this.alternatives.set(null);
       });
     });
   }
@@ -36,6 +50,7 @@ export class Generation {
       next: (data) => {
         this.recipe.set(data);
         this.isLoading.set(false);
+        this.generateImage(data.title);
       },
       error: (err) => {
         console.error('Error during generation', err);
@@ -44,9 +59,22 @@ export class Generation {
     });
   }
 
-  onSave() {
-    this.isSaving.set(true);
+  private generateImage(title: string) {
+    this.isLoadingImage.set(true);
+    this.recipeService.generateImage(title).subscribe({
+      next: (data) => {
+        this.imageBase64.set(data.image_base64);
+        this.imageMimeType.set(data.mime_type);
+        this.isLoadingImage.set(false);
+      },
+      error: (err) => {
+        console.error('Error generating image', err);
+        this.isLoadingImage.set(false);
+      },
+    });
+  }
 
+  onSave() {
     const currentRecipe = this.recipe();
     if (currentRecipe && !this.isSaved()) {
       this.isSaving.set(true);
@@ -54,14 +82,65 @@ export class Generation {
 
       this.recipeService.saveRecipe(currentRecipe).subscribe({
         next: (response) => {
-          console.log('Recette sauvegardée avec ID: ', response.id);
+          console.log('Recipe saved with ID:', response.id);
           this.isSaving.set(false);
+          this.recipeSaved.emit();
         },
         error: (err) => {
-          console.error('Erreur lors de la sauvegarde ', err);
+          console.error('Error saving recipe', err);
           this.isSaving.set(false);
+          this.isSaved.set(false);
         },
       });
+    }
+  }
+
+  toggleIngredient(ingredient: string) {
+    const current = new Set(this.selectedIngredients());
+    if (current.has(ingredient)) {
+      current.delete(ingredient);
+    } else {
+      current.add(ingredient);
+    }
+    this.selectedIngredients.set(current);
+  }
+
+  isIngredientSelected(ingredient: string): boolean {
+    return this.selectedIngredients().has(ingredient);
+  }
+
+  onGetAlternatives() {
+    const currentRecipe = this.recipe();
+    const selected = Array.from(this.selectedIngredients());
+    if (!currentRecipe || selected.length === 0) return;
+
+    this.isLoadingAlternatives.set(true);
+    this.alternatives.set(null);
+
+    this.recipeService
+      .getAlternatives({
+        selected_ingredients: selected,
+        original_recipe: currentRecipe,
+      })
+      .subscribe({
+        next: (data) => {
+          this.alternatives.set(data);
+          this.isLoadingAlternatives.set(false);
+        },
+        error: (err) => {
+          console.error('Error getting alternatives', err);
+          this.isLoadingAlternatives.set(false);
+        },
+      });
+  }
+
+  applyNewRecipe() {
+    const alt = this.alternatives();
+    if (alt) {
+      this.recipe.set(alt.new_recipe);
+      this.alternatives.set(null);
+      this.selectedIngredients.set(new Set());
+      this.generateImage(alt.new_recipe.title);
     }
   }
 }
