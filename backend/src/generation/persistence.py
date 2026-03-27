@@ -24,3 +24,13 @@ class FirestoreService:
 
         await user_recipes_ref.set(recipe_data, merge=True)
         return recipe_id
+
+    async def delete_recipe_for_user(self, user_id: str, recipe_id: str):
+        user_recipes_ref = (
+            self.db.collection("users")
+            .document(user_id)
+            .collection("recipes")
+            .document(recipe_id)
+        )
+
+        await user_recipes_ref.delete()
