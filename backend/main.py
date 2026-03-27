@@ -74,3 +74,16 @@ async def delete_recipe(recipe_id: str, user: User = Depends(get_current_user)):
             status_code=500,
             detail="An error occurred while deleting the recipe from the database.",
         )
+
+
+@app.get("/recipes")
+async def get_recipes(user: User = Depends(get_current_user)):
+    try:
+        recipes = await firestore.get_recipes(user.uid)
+        return recipes
+    except Exception as e:
+        print(f"DEBUG: Firestore Error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occured while getting the recipes from the database",
+        )

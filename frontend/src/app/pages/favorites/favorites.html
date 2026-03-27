@@ -1,0 +1,15 @@
+<div class="home-container">
+  <header>
+    <h1>Saved recipes</h1>
+  </header>
+
+  @if (recipes().length > 0) {
+    <div class="recipes-grid">
+      @for (item of recipes(); track item.id) {
+        <app-recipe-card [recipe]="item" (delete)="onDelete($event)"> </app-recipe-card>
+      }
+    </div>
+  } @else {
+    <p>Vous n'avez pas encore de recettes enregistrées.</p>
+  }
+</div>
