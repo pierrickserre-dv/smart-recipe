@@ -1,10 +1,7 @@
 <div class="card">
-  <h3>{{ recipe().title }}</h3>
-  <p>{{ recipe().prep_time }}</p>
-
-  <button (click)="onDelete()">🗑️ Supprimer</button>
   <div class="recipe-card">
     <header class="recipe-header">
+      <button (click)="onDelete()">🗑️ Supprimer</button>
       <h2>{{ recipe().title }}</h2>
       <div class="meta-tags">
         <span class="tag"><i class="icon">⏱</i> {{ recipe().prep_time }}</span>

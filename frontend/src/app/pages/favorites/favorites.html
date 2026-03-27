@@ -1,15 +1,58 @@
-<div class="home-container">
-  <header>
-    <h1>Saved recipes</h1>
-  </header>
-
-  @if (recipes().length > 0) {
-    <div class="recipes-grid">
+<div class="favorite-container">
+  <div class="master-detail-container">
+    <aside class="recipe-list">
       @for (item of recipes(); track item.id) {
-        <app-recipe-card [recipe]="item" (delete)="onDelete($event)"> </app-recipe-card>
+        <div
+          class="mini-card"
+          [class.active]="selectedRecipe()?.id === item.id"
+          (click)="onSelected(item)"
+        >
+          <h4>{{ item.title }}</h4>
+          <div class="mini-meta">
+            <span>⏱️ {{ item.prep_time }}</span>
+            <button (click)="onDelete(item.id!); $event.stopPropagation()">🗑️</button>
+          </div>
+        </div>
       }
+    </aside>
+  </div>
+
+  @if (selectedRecipe(); as recipe) {
+    <div class="recipe-card">
+      <header class="recipe-header">
+        <h2>{{ selectedRecipe()?.title }}</h2>
+        <div class="meta-tags">
+          <span class="tag"><i class="icon">⏱</i> {{ selectedRecipe()?.prep_time }}</span>
+          <span class="tag"><i class="icon">📊</i> {{ selectedRecipe()?.difficulty }}</span>
+        </div>
+      </header>
+
+      <div class="recipe-content">
+        <aside class="ingredients-sidebar">
+          <h3>Ingredients</h3>
+          <ul class="ing-list">
+            @for (ing of selectedRecipe()?.ingredients_used; track $index) {
+              <li><span class="check">✓</span> {{ ing }}</li>
+            }
+          </ul>
+        </aside>
+
+        <main class="instructions-main">
+          <h3>Instructions</h3>
+          <ol class="steps-list">
+            @for (step of selectedRecipe()?.instructions; track $index) {
+              <li>
+                <span class="step-number">{{ $index + 1 }}</span>
+                <p>{{ step }}</p>
+              </li>
+            }
+          </ol>
+        </main>
+      </div>
     </div>
   } @else {
-    <p>Vous n'avez pas encore de recettes enregistrées.</p>
+    <div class="empty-state">
+      <p>Select a recipe to see details</p>
+    </div>
   }
 </div>
