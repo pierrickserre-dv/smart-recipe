@@ -9,7 +9,6 @@ try:
     from .schemas import (
         AlternativesRequest,
         AlternativesResponse,
-        IngredientAlternative,
         RecipeRequest,
         RecipeResponse,
     )
@@ -17,7 +16,6 @@ except ImportError:
     from schemas import (
         AlternativesRequest,
         AlternativesResponse,
-        IngredientAlternative,
         RecipeRequest,
         RecipeResponse,
     )
