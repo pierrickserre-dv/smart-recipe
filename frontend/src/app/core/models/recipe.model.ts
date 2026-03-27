@@ -16,3 +16,8 @@ export interface SaveRecipeResponse {
   message: string;
   id: string;
 }
+
+export interface SuccessResponse {
+  status: string;
+  message: string;
+}

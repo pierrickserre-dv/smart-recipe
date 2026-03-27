@@ -16,8 +16,8 @@ export class RecipeService {
     return this.http.post<SaveRecipeResponse>('/api/recipe', recipe);
   }
 
-  deleteRecipe(recipeId: string): Observable<any> {
-    return this.http.delete<any>(`/api/recipes/${recipeId}`);
+  deleteRecipe(recipeId: string): Observable<SaveRecipeResponse> {
+    return this.http.delete<SaveRecipeResponse>(`/api/recipes/${recipeId}`);
   }
 
   getRecipes(): Observable<RecipeResponse[]> {
