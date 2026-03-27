@@ -1,0 +1,46 @@
+USER STORY : GET LAST 10 RECIPES
+
+Backend :
+
+- src/generation/persistence.py : get_user_recipes()
+
+- src/generation/schemas.py : SavedRecipe
+
+- main.py : GET /recipes
+
+Frontend : 
+
+- src/app/core/models/recipe.model.ts : SavedRecipe
+
+- src/app/core/services/recipe.service.ts : getRecipes dans RecipeService
+
+- src/app/pages/home/home.ts : loadRecentRecipes()
+
+- src/app/pages/home/home.html : section 'history-section'
+
+
+USER STORY : GENERATE IMAGE FOR RECIPE
+
+Backend : 
+
+- src/generation/RecipeService.py : dans RecipeAIService, generateImage() via Imagen3
+
+- src/generation/schemas.py : ImageRequest, ImageResponse
+
+- main.py : POST /generate-image
+
+Frontend :
+
+- src/app/core/services/recipe.service.ts : generateImage()
+
+- src/app/components/generation/generation.ts : generateImage()
+
+
+
+Points to know better : 
+
+Observable
+
+.subscribe()
+
+next
