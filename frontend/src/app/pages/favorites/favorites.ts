@@ -29,7 +29,12 @@ export class Favorites implements OnInit {
   onDelete(recipeId: string) {
     this.recipeService.deleteRecipe(recipeId).subscribe({
       next: () => {
-        this.recipes.set(this.recipes().filter((r) => r.id !== recipeId));
+        this.recipes.set(
+          this.recipes().filter((r) => {
+            console.log('Comparaison:', r.id, 'avec', recipeId);
+            return r.id !== recipeId;
+          }),
+        );
       },
     });
   }
