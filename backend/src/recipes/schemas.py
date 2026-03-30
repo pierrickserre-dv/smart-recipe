@@ -1,4 +1,3 @@
-import re
 from typing import List
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
@@ -13,18 +12,6 @@ STAPLES = {
     "garlic",
     "flour",
     "sugar",
-}
-
-FORBIDDEN_POOL = {
-    "cream",
-    "milk",
-    "cheese",
-    "wine",
-    "honey",
-    "saffron",
-    "parsley",
-    "lemon",
-    "lime",
 }
 
 
@@ -55,25 +42,4 @@ class RecipeResponse(BaseModel):
 
             if not is_staple and not is_allowed:
                 raise ValueError(f"Unauthorized ingredient used: '{ing}'")
-        return v
-
-    @field_validator("instructions")
-    @classmethod
-    def check_instruction_hallucinations(cls, v: List[str], info: ValidationInfo):
-        if info.context is None:
-            return v
-        allowed_pantry = [
-            i.lower().strip() for i in info.context.get("allowed_ingredients", [])
-        ]
-        all_authorized = set(allowed_pantry).union(STAPLES)
-
-        full_text = " ".join(v).lower()
-        words_in_instructions = set(re.findall(r"\b\w+\b", full_text))
-
-        for word in words_in_instructions:
-            if word in FORBIDDEN_POOL and word not in all_authorized:
-                if not any(word in auth for auth in all_authorized):
-                    raise ValueError(
-                        f"AI hallucinated ingredient in instructions: '{word}'"
-                    )
         return v
