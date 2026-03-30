@@ -4,13 +4,4 @@
   <router-outlet></router-outlet>
 </main>
 
-<footer style="font-size: 0.8em; color: gray; text-align: center">
-  Statut : {{ messageDuBackend }}
-
-  @if (authService.user()) {
-    <p style="color: green">Tu es bien connecté en tant que {{ authService.user()?.email }}.</p>
-    <button (click)="authService.logout()">Se déconnecter</button>
-  } @else {
-    <p style="color: red">Pas connecté</p>
-  }
-</footer>
+<footer></footer>

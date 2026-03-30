@@ -28,7 +28,6 @@ export class Login {
       const password = this.profileForm.value.password ?? '';
       await this.authService.login(email, password);
       console.log('Tu es bien connecté en tant que : ', this.authService.user());
-      this.http.get<{ message: string }>('/api/bonjour').subscribe();
       this.router.navigate(['/']);
     } catch (error: unknown) {
       const firebaseError = error as { code?: string };
