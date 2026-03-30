@@ -13,10 +13,9 @@ class RecipeAIService:
     def __init__(self):
 
         project_id = os.getenv("GOOGLE_CLOUD_PROJECT", "sandbox-pserre")
+        location = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 
-        self.client = genai.Client(
-            vertexai=True, project=project_id, location="us-central1"
-        )
+        self.client = genai.Client(vertexai=True, project=project_id, location=location)
 
         self.model_id = "gemini-2.5-flash"
 
