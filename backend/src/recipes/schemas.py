@@ -1,7 +1,18 @@
-import re
 from typing import List
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
+
+STAPLES = {
+    "salt",
+    "pepper",
+    "oil",
+    "water",
+    "butter",
+    "olive oil",
+    "garlic",
+    "flour",
+    "sugar",
+}
 
 
 class RecipeRequest(BaseModel):
@@ -23,66 +34,12 @@ class RecipeResponse(BaseModel):
         allowed = [
             i.lower().strip() for i in info.context.get("allowed_ingredients", [])
         ]
-        staples = {
-            "salt",
-            "pepper",
-            "oil",
-            "water",
-            "butter",
-            "olive oil",
-            "garlic",
-            "flour",
-            "sugar",
-        }
 
         for ing in v:
             ing_lower = ing.lower().strip()
-            is_staple = ing_lower in staples
+            is_staple = ing_lower in STAPLES
             is_allowed = any(item in ing_lower for item in allowed if item)
 
             if not is_staple and not is_allowed:
                 raise ValueError(f"Unauthorized ingredient used: '{ing}'")
-        return v
-
-    @field_validator("instructions")
-    @classmethod
-    def check_instruction_hallucinations(cls, v: List[str], info: ValidationInfo):
-        if info.context is None:
-            return v
-        allowed_pantry = [
-            i.lower().strip() for i in info.context.get("allowed_ingredients", [])
-        ]
-        staples = {
-            "salt",
-            "pepper",
-            "oil",
-            "water",
-            "butter",
-            "olive oil",
-            "garlic",
-            "sugar",
-            "flour",
-        }
-        all_authorized = set(allowed_pantry).union(staples)
-
-        forbidden_pool = {
-            "cream",
-            "milk",
-            "cheese",
-            "wine",
-            "honey",
-            "saffron",
-            "parsley",
-            "lemon",
-            "lime",
-        }
-        full_text = " ".join(v).lower()
-        words_in_instructions = set(re.findall(r"\b\w+\b", full_text))
-
-        for word in words_in_instructions:
-            if word in forbidden_pool and word not in all_authorized:
-                if not any(word in auth for auth in all_authorized):
-                    raise ValueError(
-                        f"AI hallucinated ingredient in instructions: '{word}'"
-                    )
         return v

@@ -1,7 +1,7 @@
-import os
-
 from google import genai
 from google.genai import types
+
+from src.config import settings
 
 try:
     from .schemas import RecipeRequest, RecipeResponse
@@ -11,14 +11,13 @@ except ImportError:
 
 class RecipeAIService:
     def __init__(self):
-
-        project_id = os.getenv("GOOGLE_CLOUD_PROJECT", "sandbox-pserre")
+        self.model_id = "gemini-2.5-flash"
 
         self.client = genai.Client(
-            vertexai=True, project=project_id, location="us-central1"
+            vertexai=True,
+            project=settings.google_cloud_project,
+            location=settings.google_cloud_location,
         )
-
-        self.model_id = "gemini-2.5-flash"
 
     def generate_recipe(self, data: RecipeRequest) -> RecipeResponse:
         prompt = (
@@ -53,30 +52,3 @@ class RecipeAIService:
         except Exception as e:
             print(f"Validation Error: {e}")
             raise e
-
-
-if __name__ == "__main__":
-    rs = RecipeAIService()
-
-    ingredients_list = [
-        "chicken breast",
-        "heavy cream",
-        "spinach",
-        "parmesan cheese",
-        "garlic",
-    ]
-    request_data = RecipeRequest(ingredients=ingredients_list)
-
-    print("--- Sending Request to Gemini ---")
-    try:
-        recipe = rs.generate_recipe(request_data)
-
-        print(f"\nSUCCESS: {recipe.title}")
-        print(f"Prep Time: {recipe.prep_time}")
-        print(f"Ingredients Used: {', '.join(recipe.ingredients_used)}")
-        print("\nInstructions:")
-        for i, step in enumerate(recipe.instructions, 1):
-            print(f"{i}. {step}")
-
-    except Exception as e:
-        print(f"\nFAILED: {e}")

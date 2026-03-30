@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, signal, untracked } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
@@ -14,25 +14,10 @@ export class Generation {
   @Input() ingredients: string[] = [];
 
   recipe = signal<RecipeResponse | null>(null);
-  isLoading = signal<boolean>(false);
-  isSaving = signal<boolean>(false);
-  isSaved = signal<boolean>(false);
 
   status = signal<GenerationStatus>('idle');
 
   private recipeService = inject(RecipeService);
-
-  constructor() {
-    effect(() => {
-      this.recipe();
-
-      untracked(() => {
-        if (this.status() === 'saved') {
-          this.status.set('success');
-        }
-      });
-    });
-  }
 
   onGenerate() {
     this.status.set('loading');
@@ -51,11 +36,10 @@ export class Generation {
   }
 
   onSave() {
-    this.isSaving.set(true);
-
     const currentRecipe = this.recipe();
-    if (currentRecipe && !this.isSaved()) {
-      this.status.set('success');
+
+    if (currentRecipe && this.status() !== 'saved') {
+      this.status.set('saving');
 
       this.recipeService.saveRecipe(currentRecipe).subscribe({
         next: (response) => {

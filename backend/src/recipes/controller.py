@@ -45,3 +45,32 @@ async def save_recipe(request: RecipeResponse, user: User = Depends(get_current_
             status_code=500,
             detail="An error occurred while saving the recipe to the database.",
         )
+
+
+@router.delete("/{recipe_id}")
+async def delete_recipe(recipe_id: str, user: User = Depends(get_current_user)):
+    try:
+        await firestore.delete_recipe_for_user(user.uid, recipe_id)
+        return {
+            "status": "success",
+            "message": f"Recipe {recipe_id} deleted successfully",
+        }
+    except Exception as e:
+        print(f"DEBUG: Firestore Error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while deleting the recipe from the database.",
+        )
+
+
+@router.get("")
+async def get_recipes(user: User = Depends(get_current_user)):
+    try:
+        recipes = await firestore.get_recipes(user.uid)
+        return recipes
+    except Exception as e:
+        print(f"DEBUG: Firestore Error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occured while getting the recipes from the database",
+        )

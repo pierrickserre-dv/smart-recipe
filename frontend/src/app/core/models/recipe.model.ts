@@ -3,6 +3,7 @@ export interface RecipeRequest {
 }
 
 export interface RecipeResponse {
+  id?: string;
   title: string;
   prep_time: string;
   difficulty: string;
@@ -14,4 +15,9 @@ export interface SaveRecipeResponse {
   status: string;
   message: string;
   id: string;
+}
+
+export interface SuccessResponse {
+  status: string;
+  message: string;
 }

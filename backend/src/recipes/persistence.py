@@ -24,3 +24,24 @@ class FirestoreService:
 
         user_recipes_ref.set(recipe_data, merge=True)
         return recipe_id
+
+    async def delete_recipe_for_user(self, user_id: str, recipe_id: str):
+        user_recipes_ref = (
+            self.db.collection("users")
+            .document(user_id)
+            .collection("recipes")
+            .document(recipe_id)
+        )
+
+        user_recipes_ref.delete()
+
+    async def get_recipes(self, user_id: str):
+        docs = (
+            self.db.collection("users").document(user_id).collection("recipes").stream()
+        )
+        recipes = []
+        for doc in docs:
+            recipe_data = doc.to_dict()
+            recipe_data["id"] = doc.id
+            recipes.append(recipe_data)
+        return recipes
