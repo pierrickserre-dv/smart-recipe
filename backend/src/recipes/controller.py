@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from src.auth.dependencies import get_current_user
 from src.auth.schemas import User
-from src.generation.persistence import FirestoreService
-from src.generation.RecipeService import RecipeAIService
-from src.generation.schemas import RecipeRequest, RecipeResponse
+from src.recipes.persistence import FirestoreService
+from src.recipes.schemas import RecipeRequest, RecipeResponse
+from src.recipes.service import RecipeAIService
 
 router = APIRouter()
 

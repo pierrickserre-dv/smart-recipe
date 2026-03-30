@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 
 from main import app
 from src.auth.dependencies import get_current_user
-from src.generation.schemas import RecipeResponse
+from src.recipes.schemas import RecipeResponse
 
 client = TestClient(app)
 
@@ -24,14 +24,14 @@ def override_auth(mock_user):
 
 
 def test_auth_no_header():
-    response = client.post("/generate", json={"ingredients": ["tomato"]})
+    response = client.post("/recipes/generate", json={"ingredients": ["tomato"]})
     assert response.status_code == 401
 
 
 def test_auth_invalid_scheme():
     headers = {"Authorization": "Basic dXNlcjpwYXNz"}
     response = client.post(
-        "/generate", json={"ingredients": ["tomato"]}, headers=headers
+        "/recipes/generate", json={"ingredients": ["tomato"]}, headers=headers
     )
     assert response.status_code == 401
 
@@ -39,7 +39,7 @@ def test_auth_invalid_scheme():
 def test_auth_empty_token():
     headers = {"Authorization": "Bearer "}
     response = client.post(
-        "/generate", json={"ingredients": ["tomato"]}, headers=headers
+        "/recipes/generate", json={"ingredients": ["tomato"]}, headers=headers
     )
     assert response.status_code == 401
 
@@ -48,25 +48,25 @@ def test_auth_empty_token():
 
 
 def test_request_min_length_validation(override_auth):
-    response = client.post("/generate", json={"ingredients": []})
+    response = client.post("/recipes/generate", json={"ingredients": []})
     assert response.status_code == 422
 
 
 def test_request_extreme_input_size(override_auth):
     # With max_length=50 in Schema, 1000 items should return 422, not 500
     huge_payload = {"ingredients": ["ingredient_" + str(i) for i in range(1000)]}
-    response = client.post("/generate", json=huge_payload)
+    response = client.post("/recipes/generate", json=huge_payload)
     assert response.status_code == 422
 
 
 def test_request_non_string_ingredients(override_auth):
-    response = client.post("/generate", json={"ingredients": [123, True]})
+    response = client.post("/recipes/generate", json={"ingredients": [123, True]})
     assert response.status_code == 422
 
 
 def test_request_malformed_json_body(override_auth):
     response = client.post(
-        "/generate",
+        "/recipes/generate",
         content="{'ingredients': ['salt']}",
         headers={"Content-Type": "application/json"},
     )
@@ -113,16 +113,20 @@ def test_service_returns_incorrect_types(mocker, override_auth):
         "ingredients_used": "not a list",
         "instructions": ["Step 1"],
     }
-    mocker.patch("main.recipe_service.generate_recipe", return_value=bad_type_data)
-    response = client.post("/generate", json={"ingredients": ["water"]})
+    mocker.patch(
+        "src.recipes.controller.recipe_service.generate_recipe",
+        return_value=bad_type_data,
+    )
+    response = client.post("/recipes/generate", json={"ingredients": ["water"]})
     assert response.status_code == 500
 
 
 def test_service_unhandled_error(mocker, override_auth):
     mocker.patch(
-        "main.recipe_service.generate_recipe", side_effect=RuntimeError("API Crash")
+        "src.recipes.controller.recipe_service.generate_recipe",
+        side_effect=RuntimeError("API Crash"),
     )
-    response = client.post("/generate", json={"ingredients": ["water"]})
+    response = client.post("/recipes/generate", json={"ingredients": ["water"]})
     assert response.status_code == 500
     assert "error" in response.json()["detail"].lower()
 
@@ -138,10 +142,13 @@ def test_idempotency_simulation(mocker, override_auth):
         "ingredients_used": ["salt"],
         "instructions": ["Done"],
     }
-    mocker.patch("main.recipe_service.generate_recipe", return_value=mock_recipe)
+    mocker.patch(
+        "src.recipes.controller.recipe_service.generate_recipe",
+        return_value=mock_recipe,
+    )
 
-    res1 = client.post("/generate", json={"ingredients": ["salt"]})
-    res2 = client.post("/generate", json={"ingredients": ["salt"]})
+    res1 = client.post("/recipes/generate", json={"ingredients": ["salt"]})
+    res2 = client.post("/recipes/generate", json={"ingredients": ["salt"]})
     assert res1.json() == res2.json()
 
 
@@ -164,7 +171,7 @@ def test_instruction_scrubber_full_logic_check():
 
 def test_cors_preflight():
     response = client.options(
-        "/generate",
+        "/recipes/generate",
         headers={
             "Origin": "http://localhost:4200",
             "Access-Control-Request-Method": "POST",
@@ -180,7 +187,7 @@ def test_cors_preflight():
 
 def test_app_recovers_after_fail(mocker, override_auth):
     mocker.patch(
-        "main.recipe_service.generate_recipe",
+        "src.recipes.controller.recipe_service.generate_recipe",
         side_effect=[
             Exception("Transient Fail"),
             {
@@ -193,9 +200,9 @@ def test_app_recovers_after_fail(mocker, override_auth):
         ],
     )
 
-    first_res = client.post("/generate", json={"ingredients": ["salt"]})
+    first_res = client.post("/recipes/generate", json={"ingredients": ["salt"]})
     assert first_res.status_code == 500
 
-    second_res = client.post("/generate", json={"ingredients": ["salt"]})
+    second_res = client.post("/recipes/generate", json={"ingredients": ["salt"]})
     assert second_res.status_code == 200
     assert second_res.json()["title"] == "Success"
