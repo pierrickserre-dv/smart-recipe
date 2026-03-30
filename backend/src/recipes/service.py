@@ -1,4 +1,3 @@
-
 from google import genai
 from google.genai import types
 
@@ -16,7 +15,7 @@ class RecipeAIService:
         self.client = genai.Client(
             vertexai=True,
             project=settings.google_cloud_project,
-            location=settings.google_cloud_location
+            location=settings.google_cloud_location,
         )
 
     def generate_recipe(self, data: RecipeRequest) -> RecipeResponse:
