@@ -2,6 +2,8 @@ import { Component, effect, inject, Input, signal, untracked } from '@angular/co
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
+export type GenerationStatus = 'idle' | 'loading' | 'success' | 'saving' | 'saved' | 'error';
+
 @Component({
   selector: 'app-generation',
   imports: [],
@@ -16,6 +18,8 @@ export class Generation {
   isSaving = signal<boolean>(false);
   isSaved = signal<boolean>(false);
 
+  status = signal<GenerationStatus>('idle');
+
   private recipeService = inject(RecipeService);
 
   constructor() {
@@ -23,23 +27,25 @@ export class Generation {
       this.recipe();
 
       untracked(() => {
-        this.isSaved.set(false);
+        if (this.status() === 'saved') {
+          this.status.set('success');
+        }
       });
     });
   }
 
   onGenerate() {
-    this.isLoading.set(true);
+    this.status.set('loading');
     this.recipe.set(null);
 
     this.recipeService.generateRecipe(this.ingredients).subscribe({
       next: (data) => {
         this.recipe.set(data);
-        this.isLoading.set(false);
+        this.status.set('success');
       },
       error: (err) => {
         console.error('Error during generation', err);
-        this.isLoading.set(false);
+        this.status.set('error');
       },
     });
   }
@@ -49,17 +55,16 @@ export class Generation {
 
     const currentRecipe = this.recipe();
     if (currentRecipe && !this.isSaved()) {
-      this.isSaving.set(true);
-      this.isSaved.set(true);
+      this.status.set('success');
 
       this.recipeService.saveRecipe(currentRecipe).subscribe({
         next: (response) => {
           console.log('Recette sauvegardée avec ID: ', response.id);
-          this.isSaving.set(false);
+          this.status.set('saved');
         },
         error: (err) => {
           console.error('Erreur lors de la sauvegarde ', err);
-          this.isSaving.set(false);
+          this.status.set('error');
         },
       });
     }

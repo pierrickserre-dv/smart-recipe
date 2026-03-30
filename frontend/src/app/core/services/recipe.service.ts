@@ -5,7 +5,7 @@ import { RecipeResponse, SaveRecipeResponse } from '../models/recipe.model';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
-  private apiUrl = '/api/generate';
+  private apiUrl = '/api/recipes/generate';
   private http = inject(HttpClient);
 
   generateRecipe(ingredients: string[]): Observable<RecipeResponse> {
@@ -13,6 +13,6 @@ export class RecipeService {
   }
 
   saveRecipe(recipe: RecipeResponse): Observable<SaveRecipeResponse> {
-    return this.http.post<SaveRecipeResponse>('/api/save', recipe);
+    return this.http.post<SaveRecipeResponse>('/api/recipes/save', recipe);
   }
 }

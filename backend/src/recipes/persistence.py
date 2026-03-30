@@ -22,5 +22,5 @@ class FirestoreService:
 
         recipe_data["created_at"] = firestore.SERVER_TIMESTAMP
 
-        await user_recipes_ref.set(recipe_data, merge=True)
+        user_recipes_ref.set(recipe_data, merge=True)
         return recipe_id

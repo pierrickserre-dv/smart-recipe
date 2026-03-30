@@ -3,27 +3,28 @@
     <div class="actions-container">
       <button
         class="save-button"
-        [class.saved]="isSaved()"
+        [class.saved]="status() === 'saved'"
         (click)="onSave()"
-        [disabled]="isSaving() || isSaved()"
+        [disabled]="status() === 'saving' || status() === 'saved'"
       >
         <span>
-          @if (isSaved()) {
+          @if (status() === 'saved') {
             ✅
-          } @else if (!isSaving()) {
+          } @else if (status() !== 'saving') {
             💾
           }
         </span>
 
-        @if (isSaved()) {
+        @if (status() === 'saved') {
           Already saved
         } @else {
-          {{ isSaving() ? 'Loading...' : 'Save recipe' }}
+          {{ status() === 'saving' ? 'Loading...' : 'Save recipe' }}
         }
       </button>
     </div>
   }
-  @if (recipe() && !isLoading()) {
+
+  @if (recipe() && status() !== 'loading') {
     <div class="recipe-card">
       <header class="recipe-header">
         <h2>{{ recipe()?.title }}</h2>
