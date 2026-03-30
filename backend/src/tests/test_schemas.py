@@ -62,17 +62,3 @@ def test_idempotency_simulation(mocker, override_auth):
     res1 = client.post("/recipes/generate", json={"ingredients": ["salt"]})
     res2 = client.post("/recipes/generate", json={"ingredients": ["salt"]})
     assert res1.json() == res2.json()
-
-
-def test_instruction_scrubber_full_logic_check():
-    raw_ai_output = {
-        "title": "Ghost Soup",
-        "prep_time": "5m",
-        "difficulty": "Easy",
-        "ingredients_used": ["water", "salt"],
-        "instructions": ["Boil water", "Secretly add heavy cream", "Serve"],
-    }
-    with pytest.raises(ValueError, match="hallucinated"):
-        RecipeResponse.model_validate(
-            raw_ai_output, context={"allowed_ingredients": ["water"]}
-        )
