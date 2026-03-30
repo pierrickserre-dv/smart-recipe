@@ -11,6 +11,7 @@ except ImportError:
 
 class RecipeAIService:
     def __init__(self):
+        self.model_id = "gemini-2.5-flash"
 
         self.client = genai.Client(
             vertexai=True,
