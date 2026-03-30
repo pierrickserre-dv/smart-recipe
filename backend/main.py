@@ -5,7 +5,7 @@ from src.recipes.controller import router as recipe_controller
 
 app = FastAPI()
 
-app.include_router(recipe_controller, prefix="/recipes")
+app.include_router(recipe_controller, prefix="/recipes", tags=["Recipes"])
 
 app.add_middleware(
     CORSMiddleware,
