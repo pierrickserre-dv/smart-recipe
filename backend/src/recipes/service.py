@@ -3,6 +3,8 @@ import os
 from google import genai
 from google.genai import types
 
+from src.config import settings
+
 try:
     from .schemas import RecipeRequest, RecipeResponse
 except ImportError:
@@ -12,12 +14,11 @@ except ImportError:
 class RecipeAIService:
     def __init__(self):
 
-        project_id = os.getenv("GOOGLE_CLOUD_PROJECT", "sandbox-pserre")
-        location = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
-
-        self.client = genai.Client(vertexai=True, project=project_id, location=location)
-
-        self.model_id = "gemini-2.5-flash"
+        self.client = genai.Client(
+            vertexai=True,
+            project=settings.google_cloud_project,
+            location=settings.google_cloud_location
+        )
 
     def generate_recipe(self, data: RecipeRequest) -> RecipeResponse:
         prompt = (
