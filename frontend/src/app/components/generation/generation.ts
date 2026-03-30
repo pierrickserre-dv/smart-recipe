@@ -1,6 +1,8 @@
-import { Component, effect, inject, Input, signal, untracked } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
+
+export type GenerationStatus = 'idle' | 'loading' | 'success' | 'saving' | 'saved' | 'error';
 
 @Component({
   selector: 'app-generation',
@@ -12,54 +14,40 @@ export class Generation {
   @Input() ingredients: string[] = [];
 
   recipe = signal<RecipeResponse | null>(null);
-  isLoading = signal<boolean>(false);
-  isSaving = signal<boolean>(false);
-  isSaved = signal<boolean>(false);
+  status = signal<GenerationStatus>('idle');
 
   private recipeService = inject(RecipeService);
 
-  constructor() {
-    effect(() => {
-      this.recipe();
-
-      untracked(() => {
-        this.isSaved.set(false);
-      });
-    });
-  }
-
   onGenerate() {
-    this.isLoading.set(true);
+    this.status.set('loading');
     this.recipe.set(null);
 
     this.recipeService.generateRecipe(this.ingredients).subscribe({
       next: (data) => {
         this.recipe.set(data);
-        this.isLoading.set(false);
+        this.status.set('success');
       },
       error: (err) => {
         console.error('Error during generation', err);
-        this.isLoading.set(false);
+        this.status.set('error');
       },
     });
   }
 
   onSave() {
-    this.isSaving.set(true);
-
     const currentRecipe = this.recipe();
-    if (currentRecipe && !this.isSaved()) {
-      this.isSaving.set(true);
-      this.isSaved.set(true);
+
+    if (currentRecipe && this.status() !== 'saved') {
+      this.status.set('saving');
 
       this.recipeService.saveRecipe(currentRecipe).subscribe({
         next: (response) => {
           console.log('Recette sauvegardée avec ID: ', response.id);
-          this.isSaving.set(false);
+          this.status.set('saved');
         },
         error: (err) => {
           console.error('Erreur lors de la sauvegarde ', err);
-          this.isSaving.set(false);
+          this.status.set('error');
         },
       });
     }

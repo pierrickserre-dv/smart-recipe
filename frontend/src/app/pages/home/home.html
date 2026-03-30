@@ -34,17 +34,17 @@
   </div>
 
   <div class="action-zone">
-    @if (selectedIngredients.length > 0 || generation.isLoading()) {
+    @if (selectedIngredients.length > 0 || generation.status() === 'loading') {
       <button
         class="btn-generate"
         (click)="generation.onGenerate()"
-        [disabled]="generation.isLoading() || selectedIngredients.length === 0"
-        [class.loading]="generation.isLoading()"
+        [disabled]="generation.status() === 'loading' || selectedIngredients.length === 0"
+        [class.loading]="generation.status() === 'loading'"
       >
-        @if (generation.isLoading()) {
+        @if (generation.status() === 'loading') {
           <span class="spinner"></span>
         }
-        {{ generation.isLoading() ? 'The chef is thinking...' : 'Generate my recipe' }}
+        {{ generation.status() === 'loading' ? 'The chef is thinking...' : 'Generate my recipe' }}
       </button>
     }
   </div>
