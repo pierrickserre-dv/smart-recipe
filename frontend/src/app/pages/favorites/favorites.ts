@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
@@ -14,6 +14,19 @@ export class Favorites implements OnInit {
 
   recipes = signal<RecipeResponse[]>([]);
   selectedRecipe = signal<RecipeResponse | null>(null);
+  maxTime = signal<number | null>(null);
+
+  filteredRecipes = computed(() => {
+    const time = this.maxTime();
+    const allRecipes = this.recipes();
+
+    if (!time) return allRecipes;
+
+    return allRecipes.filter((recipe) => {
+      const prepTimeNum = parseInt(recipe.prep_time);
+      return prepTimeNum <= time;
+    });
+  });
 
   ngOnInit() {
     this.loadRecipes();
@@ -44,5 +57,16 @@ export class Favorites implements OnInit {
 
   onSelected(recipe: RecipeResponse) {
     this.selectedRecipe.set(recipe);
+  }
+
+  onFilterChange(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.maxTime.set(val ? parseInt(val) : null);
+  }
+
+  adjustTime(amount: number) {
+    const current = this.maxTime() ?? 0;
+    const newValue = Math.max(0, current + amount);
+    this.maxTime.set(newValue > 0 ? newValue : null);
   }
 }
