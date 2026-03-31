@@ -1,4 +1,5 @@
 import { Component, inject, Input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
@@ -6,7 +7,7 @@ export type GenerationStatus = 'idle' | 'loading' | 'success' | 'saving' | 'save
 
 @Component({
   selector: 'app-generation',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './generation.html',
   styleUrl: './generation.css',
 })

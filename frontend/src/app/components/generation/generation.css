@@ -5,10 +5,27 @@
   padding: 20px;
 }
 
-.action-zone {
+.actions-container {
   display: flex;
+  gap: 20px;
+}
+
+.see-button {
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  background: var(--primary-emerald);
+  color: var(--text-dark);
+  border: 1px solid var(--primary-emerald);
+  border-radius: 12px;
+  font-weight: 400;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 40px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .btn-generate {
