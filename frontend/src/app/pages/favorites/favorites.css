@@ -6,6 +6,40 @@ h1 {
   text-align: center;
 }
 
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--border-grey);
+  color: var(--text-gray);
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-left: 20px;
+}
+
+.btn-back:hover {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  border-color: var(--text-gray);
+}
+
+.btn-back .icon {
+  font-size: 1.1rem;
+}
+
 .recipe-list::-webkit-scrollbar,
 .recipe-card::-webkit-scrollbar {
   width: 8px;
@@ -28,6 +62,125 @@ h1 {
   background: var(--primary-emerald);
 }
 
+.filter-section {
+  padding: 10px 5px 20px 5px;
+  position: relative;
+  top: auto;
+  max-width: 150px;
+  background: transparent;
+  z-index: 10;
+}
+.filter-label {
+  display: block;
+  color: var(--text-gray);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  padding-left: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filter-badge {
+  display: flex;
+  align-items: center;
+  background: var(--bg-grey);
+  border: 1px solid var(--border-grey);
+  border-radius: 12px;
+  padding: 4px 8px;
+  width: 150px;
+}
+
+.filter-icon {
+  font-size: 1rem;
+  margin-right: 8px;
+}
+.filter-input {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  font-size: 1rem;
+  width: 21px;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  appearance: textfield;
+  -webkit-appearance: none;
+}
+
+.input-with-unit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 4px;
+}
+.unit {
+  color: var(--primary-emerald);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 2px;
+}
+.filter-actions {
+  display: flex;
+  margin-left: auto;
+  border-left: 1px solid var(--border-grey);
+  padding-left: 6px;
+  gap: 2px;
+}
+
+.filter-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-right: 5px;
+}
+
+.step-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-gray);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.step-btn:hover {
+  background: var(--primary-emerald-hover);
+  color: var(--primary-emerald);
+}
+.filter-input-wrapper:hover .step-btn {
+  opacity: 0.5;
+}
+
+.step-btn:active {
+  transform: scale(0.9);
+}
+
+.filter-input::placeholder {
+  color: var(--text-gray);
+}
+
+.filter-input::-webkit-outer-spin-button,
+.filter-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .favorite-container {
   display: flex;
   flex-direction: row;
@@ -39,35 +192,30 @@ h1 {
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 100vw; /* Force la largeur à ne pas dépasser la fenêtre */
+  max-width: 100vw;
   background: var(--bg-dark);
-  align-items: flex-start; /* Garde la liste de gauche "sticky" */
+  align-items: flex-start;
   position: relative;
   min-height: 500px;
-  /* Retire tout overflow: hidden ici pour permettre le scroll vertical de la page */
 }
 
 .detail-container {
   flex: 1;
   padding-right: 10px;
-  overflow: hidden; /* CRUCIAL : empêche le contenu de déborder de cette zone Flex */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centre la carte */
+  align-items: center;
 }
 
 .recipe-list {
   flex: 0 0 350px;
   width: 350px;
-  /* On la fixe en haut de l'écran pendant qu'on scroll la recette */
   position: sticky;
   top: 20px;
-
-  /* Hauteur max = la taille de l'écran. Si la liste dépasse, elle scrolle à l'intérieur */
   max-height: calc(100vh - 40px);
   overflow-y: auto;
-  overflow-x: hidden; /* Sécurité anti-scroll horizontal */
-
+  overflow-x: hidden;
   border-right: 1px solid var(--border-grey);
   padding-inline: 1rem;
   background: var(--bg-dark);
@@ -91,9 +239,7 @@ h1 {
 .mini-card h4 {
   margin: 0 0 10px 0;
   font-size: 1rem;
-  width: 100%; /* Important pour l'ellipse */
-
-  /* Force une seule ligne avec "..." */
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -104,8 +250,26 @@ h1 {
   gap: 20px;
 }
 
+.btn-delete-text {
+  background: transparent;
+  border: 0;
+  color: var(--primary-emerald);
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.btn-delete-text:hover {
+  background: var(--primary-emerald-hover);
+  color: var(--text-light);
+}
+
 .mini-card:hover {
-  border: 1px solid var(--primary-emerald);
+  border: 1px solid var(--primary-emerald-hover);
 }
 .mini-card.active {
   color: var(--text-light);
@@ -124,18 +288,16 @@ h1 {
   background: var(--bg-dark);
   color: var(--text-light);
   width: 100%;
-  max-width: 1000px; /* Sa taille max */
+  max-width: 1000px;
   border: 1px solid var(--border-grey);
   border-radius: 24px;
-  margin-left: auto; /* Centrage automatique */
-  margin-right: auto; /* Centrage automatique */
-  margin-bottom: 40px; /* Espace esthétique en bas */
-
-  /* --- LES LIGNES MAGIQUES ANTI-SCROLL HORIZONTAL --- */
-  box-sizing: border-box; /* Inclut le padding et border dans la largeur */
-  overflow: hidden; /* Force le contenu à être coupé ou à revenir à la ligne */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+  overflow: hidden;
   height: auto;
-  max-width: calc(100% - 100px); /* Laisse de l'air sur les côtés (marges manuelles) */
+  max-width: calc(100% - 100px);
 }
 
 .recipe-header {
@@ -161,11 +323,11 @@ h1 {
 }
 .recipe-content {
   display: grid;
-  grid-template-columns: 300px 1fr; /* 300px pour les ingrédients, le reste pour les instructions */
+  grid-template-columns: 300px 1fr;
   gap: 0;
   width: 100%;
-  max-width: 100%; /* S'assure que la grille ne déborde pas de la carte */
-  overflow: hidden; /* Bloque tout débordement de la grille elle-même */
+  max-width: 100%;
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -198,9 +360,9 @@ h1 {
 
 .instructions-main {
   padding: 40px;
-  overflow-wrap: break-word; /* Force les longs mots (ou URLs) à casser */
-  word-wrap: break-word; /* Pour la compatibilité */
-  hyphens: auto; /* Ajoute des tirets si nécessaire pour casser les mots */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .steps-list {
@@ -232,12 +394,11 @@ h1 {
   color: var(--text-gray);
   line-height: 1.7;
   margin: 0;
-  /* Assure que le paragraphe ne pousse pas la largeur */
   white-space: normal;
 }
 
 .empty-state {
-  height: 400px; /* Taille fixe quand rien n'est sélectionné */
+  height: 400px;
   color: var(--text-gray);
   display: flex;
   align-items: center;

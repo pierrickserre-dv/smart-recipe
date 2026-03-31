@@ -1,6 +1,8 @@
 :root {
   --primary-emerald: #50c878;
   --primary-emerald-light: #45cf7a;
+  --primary-emerald-hover: #10b98133;
+  --primary-emerald-bg: #10b9810d;
   --bg-dark: #121212;
   --bg-grey: #1a1a1a;
   --text-light: #f9fafb;

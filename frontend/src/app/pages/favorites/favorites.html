@@ -1,9 +1,36 @@
 <div>
-  <h1>Saved recipes</h1>
+  <div class="page-header">
+    <button class="btn-back" routerLink="/home"><span class="icon">←</span> Back to Home</button>
+    <h1>Saved recipes</h1>
+  </div>
   <div class="favorite-container">
     <div class="master-detail-container">
       <aside class="recipe-list">
-        @for (item of recipes(); track item.id) {
+        <div class="filter-section">
+          <span class="filter-label">Max preparation time</span>
+          <div class="filter-badge">
+            <span class="filter-icon">⏳</span>
+
+            <div class="filter-display">
+              <input
+                type="number"
+                [value]="maxTime()"
+                (input)="onFilterChange($event)"
+                class="filter-input"
+                placeholder="--"
+              />
+              @if (maxTime()) {
+                <span class="unit">min</span>
+              }
+            </div>
+
+            <div class="filter-actions">
+              <button class="step-btn" (click)="adjustTime(-5); $event.stopPropagation()">−</button>
+              <button class="step-btn" (click)="adjustTime(5); $event.stopPropagation()">+</button>
+            </div>
+          </div>
+        </div>
+        @for (item of filteredRecipes(); track item.id) {
           <div
             class="mini-card"
             [class.active]="selectedRecipe()?.id === item.id"
@@ -17,10 +44,10 @@
             <div class="mini-meta">
               <span>⏱️ {{ item.prep_time }}</span>
               <button
-                class="mini-meta button"
+                class="btn-delete-text"
                 (click)="onDelete(item.id!); $event.stopPropagation()"
               >
-                🗑️
+                Supprimer
               </button>
             </div>
           </div>
