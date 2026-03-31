@@ -1,10 +1,43 @@
 h1 {
   font-size: 2.5rem;
   margin-bottom: 0.1rem;
-  margin-top: 50px;
   font-weight: 600;
   color: var(--text-light);
   text-align: center;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--border-grey);
+  color: var(--text-gray);
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-left: 20px;
+}
+
+.btn-back:hover {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  border-color: var(--text-gray);
+}
+
+.btn-back .icon {
+  font-size: 1.1rem;
 }
 
 .recipe-list::-webkit-scrollbar,
@@ -236,7 +269,7 @@ h1 {
 }
 
 .mini-card:hover {
-  border: 1px solid var(--primary-emerald);
+  border: 1px solid var(--primary-emerald-hover);
 }
 .mini-card.active {
   color: var(--text-light);
