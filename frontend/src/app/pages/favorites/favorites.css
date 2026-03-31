@@ -54,7 +54,7 @@ h1 {
 .filter-badge {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-grey);
   border: 1px solid var(--border-grey);
   border-radius: 12px;
   padding: 4px 8px;
@@ -215,6 +215,24 @@ h1 {
 .mini-meta {
   display: flex;
   gap: 20px;
+}
+
+.btn-delete-text {
+  background: transparent;
+  border: 0;
+  color: var(--primary-emerald);
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.btn-delete-text:hover {
+  background: var(--primary-emerald-hover);
+  color: var(--text-light);
 }
 
 .mini-card:hover {
