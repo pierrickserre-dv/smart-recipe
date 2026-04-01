@@ -11,7 +11,7 @@ import { AuthService } from './core/services/auth';
   styleUrl: './app.css',
 })
 export class App {
-  messageDuBackend = 'En attente du backend';
+  messageDuBackend = 'Waiting for backend';
   authService = inject(AuthService);
   private http = inject(HttpClient);
 
@@ -19,7 +19,7 @@ export class App {
     effect(() => {
       const user = this.authService.user();
       if (user) {
-        console.log('Utilisateur détecté, appel du backend');
+        console.log('User detected, calling backend');
         this.appelerLeBackend();
       }
     });
@@ -30,12 +30,12 @@ export class App {
       this.http.get<{ message: string }>('/api').subscribe({
         next: (data) => (this.messageDuBackend = data.message),
         error: (err) => {
-          this.messageDuBackend = "Erreur d'authentification au backend";
+          this.messageDuBackend = 'Backend authentication error.';
           console.error(err);
         },
       });
     } catch (error) {
-      console.error('Impossible de récupérer le token', error);
+      console.error('Failed to retrieve token', error);
     }
   }
 }

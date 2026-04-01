@@ -26,7 +26,7 @@ export class AuthService {
       const credential = await createUserWithEmailAndPassword(this.auth, email, password);
       return credential.user;
     } catch (error) {
-      console.error('Erreur de register', error);
+      console.error('Registration error', error);
       throw error;
     }
   }

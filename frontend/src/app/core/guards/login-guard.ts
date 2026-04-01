@@ -11,10 +11,10 @@ export const loginGuard: CanActivateFn = () => {
     take(1),
     map((currentUser) => {
       if (currentUser) {
-        console.log("L'utilisateur existe, accès accordé");
+        console.log("User exists. Access granted.");
         return router.parseUrl('');
       } else {
-        console.log("L'utilisateur n'existe pas. Accès refusé");
+        console.log("User does not exist. Access denied.");
         return true;
       }
     }),

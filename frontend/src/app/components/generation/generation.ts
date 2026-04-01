@@ -44,11 +44,11 @@ export class Generation {
 
       this.recipeService.saveRecipe(currentRecipe).subscribe({
         next: (response) => {
-          console.log('Recette sauvegardée avec ID: ', response.id);
+          console.log('Recipe saved with ID: ', response.id);
           this.status.set('saved');
         },
         error: (err) => {
-          console.error('Erreur lors de la sauvegarde ', err);
+          console.error('Error while saving.', err);
           this.status.set('error');
         },
       });

@@ -36,7 +36,7 @@ export class Favorites implements OnInit {
   loadRecipes() {
     this.recipeService.getRecipes().subscribe({
       next: (data) => this.recipes.set(data),
-      error: (err) => console.error('Erreur lors de la récupération', err),
+      error: (err) => console.error('Error during retrieval', err),
     });
   }
 
@@ -48,7 +48,7 @@ export class Favorites implements OnInit {
         }
         this.recipes.set(
           this.recipes().filter((r) => {
-            console.log('Comparaison:', r.id, 'avec', recipeId);
+            console.log('Comparison:', r.id, 'with', recipeId);
             return r.id !== recipeId;
           }),
         );
