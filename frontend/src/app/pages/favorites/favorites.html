@@ -1,0 +1,99 @@
+<div>
+  <div class="page-header">
+    <button class="btn-back" routerLink="/home"><span class="icon">←</span> Back to Home</button>
+    <h1>Saved recipes</h1>
+  </div>
+  <div class="favorite-container">
+    <div class="master-detail-container">
+      <aside class="recipe-list">
+        <div class="filter-section">
+          <span class="filter-label">Max preparation time</span>
+          <div class="filter-badge">
+            <span class="filter-icon">⏳</span>
+
+            <div class="filter-display">
+              <input
+                type="number"
+                [value]="maxTime()"
+                (input)="onFilterChange($event)"
+                class="filter-input"
+                placeholder="--"
+              />
+              @if (maxTime()) {
+                <span class="unit">min</span>
+              }
+            </div>
+
+            <div class="filter-actions">
+              <button class="step-btn" (click)="adjustTime(-5); $event.stopPropagation()">−</button>
+              <button class="step-btn" (click)="adjustTime(5); $event.stopPropagation()">+</button>
+            </div>
+          </div>
+        </div>
+        @for (item of filteredRecipes(); track item.id) {
+          <div
+            class="mini-card"
+            [class.active]="selectedRecipe()?.id === item.id"
+            role="button"
+            tabindex="0"
+            (click)="onSelected(item)"
+            (keydown.enter)="onSelected(item)"
+            (keydown.space)="$event.preventDefault(); onSelected(item)"
+          >
+            <h4>{{ item.title }}</h4>
+            <div class="mini-meta">
+              <span>⏱️ {{ item.prep_time }}</span>
+              <button
+                class="btn-delete-text"
+                (click)="onDelete(item.id!); $event.stopPropagation()"
+              >
+                Supprimer
+              </button>
+            </div>
+          </div>
+        }
+      </aside>
+
+      <div class="detail-container">
+        @if (selectedRecipe(); as recipe) {
+          <div class="recipe-card">
+            <header class="recipe-header">
+              <h2>{{ recipe.title }}</h2>
+              <div class="meta-tags">
+                <span class="tag"><i class="icon">⏱</i> {{ recipe.prep_time }}</span>
+                <span class="tag"><i class="icon">📊</i> {{ recipe.difficulty }}</span>
+              </div>
+            </header>
+
+            <div class="recipe-content">
+              <aside class="ingredients-sidebar">
+                <h3>Ingredients</h3>
+                <ul class="ing-list">
+                  @for (ing of recipe.ingredients_used; track $index) {
+                    <li><span class="check">✓</span> {{ ing }}</li>
+                  }
+                </ul>
+              </aside>
+
+              <main class="instructions-main">
+                <h3>Instructions</h3>
+                <ol class="steps-list">
+                  @for (step of recipe.instructions; track $index) {
+                    <li>
+                      <span class="step-number">{{ $index + 1 }}</span>
+                      <p>{{ step }}</p>
+                    </li>
+                  }
+                </ol>
+              </main>
+            </div>
+          </div>
+        } @else {
+          <div class="empty-state">
+            <p>Select a recipe to see details</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

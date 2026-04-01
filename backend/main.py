@@ -1,26 +1,20 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.auth.dependencies import get_current_user
+
+from src.recipes.controller import router as recipe_controller
 
 app = FastAPI()
+
+app.include_router(recipe_controller, prefix="/recipes", tags=["Recipes"])
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200"],
     allow_methods=["*"],
     allow_headers=["*"],
-) 
+)
 
 
-@app.get("/bonjour")
-def say_bonjour(user = Depends(get_current_user)):
-    return {"message": "Route privée"}
-    
 @app.get("/")
 def home():
-    return {"status": "success", "message": "Le backend fonctionne!"}
-
-@app.get("/hello")
-def say_hello():
-    return {"message": "Route publique"}
-
+    return {"status": "success", "message": "Backend works!"}

@@ -26,7 +26,7 @@ export class AuthService {
       const credential = await createUserWithEmailAndPassword(this.auth, email, password);
       return credential.user;
     } catch (error) {
-      console.error('Erreur de register', error);
+      console.error('Registration error', error);
       throw error;
     }
   }
@@ -37,5 +37,11 @@ export class AuthService {
   async logout() {
     this.router.navigate(['/welcome']);
     return signOut(this.auth);
+  }
+
+  async getToken(): Promise<string | null> {
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) return null;
+    return await currentUser.getIdToken();
   }
 }

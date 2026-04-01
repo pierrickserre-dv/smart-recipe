@@ -27,8 +27,7 @@ export class Login {
       const email = this.profileForm.value.email ?? '';
       const password = this.profileForm.value.password ?? '';
       await this.authService.login(email, password);
-      console.log('Tu es bien connecté en tant que : ', this.authService.user());
-      this.http.get<{ message: string }>('/api/bonjour').subscribe();
+      console.log('Successfully logged in as : ', this.authService.user());
       this.router.navigate(['/']);
     } catch (error: unknown) {
       const firebaseError = error as { code?: string };
@@ -37,9 +36,9 @@ export class Login {
         firebaseError.code === 'auth/invalid-credential' ||
         firebaseError.code === 'auth/user-not-found'
       ) {
-        this.errorMessage.set('Email ou mot de passe incorrect.');
+        this.errorMessage.set('Invalid email or password.');
       } else {
-        this.errorMessage.set('Une erreur est survenue. Réessayez plus tard.');
+        this.errorMessage.set('An error occurred. Please try again later.');
       }
       console.error(error);
     }

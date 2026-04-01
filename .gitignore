@@ -4,6 +4,8 @@
 venv/
 .venv/
 env/
+.env
+.ruff_cache/
 
 # --- IDEs ---
 .idea/

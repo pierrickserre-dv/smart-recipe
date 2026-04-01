@@ -10,8 +10,12 @@
       <a routerLink="/welcome" class="nav-link">Se connecter</a>
       <a routerLink="/welcome/register" class="nav-link btn-register">Créer un compte</a>
     } @else {
-      <span class="user-email"> {{ authService.user()?.email }}</span>
-      <button (click)="authService.logout()" class="btn-logout">Déconnexion</button>
+      <button routerLink="/favorites" class="btn-nav">Saved Recipes</button>
+      <span class="user-email">{{ authService.user()?.email }}</span>
+
+      <button (click)="authService.logout()" class="btn-logout" title="Déconnexion">
+        <span class="icon-logout">🚪</span>
+      </button>
     }
   </div>
 </nav>

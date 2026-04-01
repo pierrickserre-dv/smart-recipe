@@ -2,4 +2,54 @@
   <header>
     <h1>What are we cooking today?</h1>
   </header>
+
+  <div class="search-section">
+    <div class="search-input-field">
+      <span class="sparkle-icon">✨</span>
+      <input
+        #ingredientInput
+        type="text"
+        placeholder="Enter your ingredients..."
+        (input)="(0)"
+        (keyup.enter)="addIngredient(ingredientInput.value); ingredientInput.value = ''"
+      />
+      @if (ingredientInput.value.length > 0) {
+        <button
+          class="btn-add"
+          (click)="addIngredient(ingredientInput.value); ingredientInput.value = ''"
+        >
+          <span class="arrow-icon">›</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="panier">
+    @for (ing of selectedIngredients; track $index) {
+      <div class="ingredient-badge">
+        <span>{{ ing }}</span>
+        <button class="btn-remove" (click)="deleteIngredient($index)">×</button>
+      </div>
+    }
+  </div>
+
+  <div class="action-zone">
+    @if (selectedIngredients.length > 0 || generation.status() === 'loading') {
+      <button
+        class="btn-generate"
+        (click)="generation.onGenerate()"
+        [disabled]="generation.status() === 'loading' || selectedIngredients.length === 0"
+        [class.loading]="generation.status() === 'loading'"
+      >
+        @if (generation.status() === 'loading') {
+          <span class="spinner"></span>
+        }
+        {{ generation.status() === 'loading' ? 'The chef is thinking...' : 'Generate my recipe' }}
+      </button>
+    }
+  </div>
+
+  <div>
+    <app-generation #generation [ingredients]="selectedIngredients"></app-generation>
+  </div>
 </div>

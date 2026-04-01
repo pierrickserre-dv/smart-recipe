@@ -1,10 +1,16 @@
 :root {
   --primary-emerald: #50c878;
+  --primary-emerald-light: #45cf7a;
+  --primary-emerald-hover: #10b98133;
+  --primary-emerald-bg: #10b9810d;
   --bg-dark: #121212;
+  --bg-grey: #1a1a1a;
   --text-light: #f9fafb;
   --card-bg: #1a1a1a;
   --text-gray: #a8a8a8;
   --border-grey: #2c2c2c;
+  --red: #ff4d4d;
+  --error-red: red;
 }
 
 body {

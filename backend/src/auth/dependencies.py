@@ -1,20 +1,35 @@
 import firebase_admin
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from firebase_admin import auth
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-firebase_admin.initialize_app()
+from .schemas import User
+
+if not firebase_admin._apps:
+    firebase_admin.initialize_app()
 
 security = HTTPBearer()
 
-async def get_current_user(res: HTTPAuthorizationCredentials = Depends(security)):
+
+async def get_current_user(
+    res: HTTPAuthorizationCredentials = Depends(security),
+) -> User:
     token = res.credentials
     try:
         decoded_token = auth.verify_id_token(token)
-        return decoded_token
 
+        return User(
+            uid=decoded_token.get("uid"),
+            email=decoded_token.get("email"),
+            name=decoded_token.get("name"),
+        )
+
+    except auth.ExpiredIdTokenError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired"
+        )
     except Exception:
         raise HTTPException(
-            status_code=401,
-            details="Accès refusé"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
         )
