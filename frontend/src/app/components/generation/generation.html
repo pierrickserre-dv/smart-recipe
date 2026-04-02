@@ -28,6 +28,20 @@
   @if (recipe() && status() !== 'loading') {
     <div class="recipe-card">
       <header class="recipe-header">
+        @if (isLoadingImage()) {
+          <div class="image-placeholder">
+            <span class="spinner"></span>
+            <p>Generating preview...</p>
+          </div>
+        } @else if (imageBase64()) {
+          <div class="recipe-image-wrapper">
+            <img
+              [src]="'data:' + imageMimeType() + ';base64,' + imageBase64()"
+              [alt]="recipe()?.title"
+              class="recipe-image"
+            />
+          </div>
+        }
         <h2>{{ recipe()?.title }}</h2>
         <div class="meta-tags">
           <span class="tag"><i class="icon">⏱</i> {{ recipe()?.prep_time }}</span>

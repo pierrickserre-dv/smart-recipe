@@ -85,6 +85,13 @@
   animation: fadeIn 0.5s ease-out;
 }
 
+.recipe-image {
+  width: 100%;
+  max-height: 90vh;
+  object-fit: cover;
+  display: block;
+}
+
 .recipe-header {
   padding: 40px;
   background: var(--bg-dark);

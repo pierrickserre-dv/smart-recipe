@@ -1,3 +1,5 @@
+import base64
+
 from google import genai
 from google.genai import types
 
@@ -12,6 +14,7 @@ except ImportError:
 class RecipeAIService:
     def __init__(self):
         self.model_id = "gemini-2.5-flash"
+        self.image_model_id = "imagen-3.0-generate-002"
 
         self.client = genai.Client(
             vertexai=True,
@@ -52,3 +55,25 @@ class RecipeAIService:
         except Exception as e:
             print(f"Validation Error: {e}")
             raise e
+
+    def generate_image(self, title: str) -> tuple[str, str]:
+        """Generate a preview image for a recipe. Returns (base64_str, mime_type)."""
+        prompt = (
+            f"A beautiful professional food photograph of '{title}'. "
+            "The dish is elegantly plated on a ceramic plate, "
+            "soft natural lighting, shallow depth of field, "
+            "top-down angle, appetizing and vibrant colors."
+        )
+
+        response = self.client.models.generate_images(
+            model=self.image_model_id,
+            prompt=prompt,
+            config=types.GenerateImagesConfig(
+                number_of_images=1,
+                aspect_ratio="16:9",
+                output_mime_type="image/jpeg",
+            ),
+        )
+
+        image_bytes = response.generated_images[0].image.image_bytes
+        return base64.b64encode(image_bytes).decode("utf-8"), "image/jpeg"

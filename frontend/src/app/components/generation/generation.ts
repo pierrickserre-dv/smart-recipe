@@ -20,6 +20,10 @@ export class Generation {
 
   private recipeService = inject(RecipeService);
 
+  imageBase64 = signal<string | null>(null);
+  imageMimeType = signal<string>('image/jpeg');
+  isLoadingImage = signal(false);
+
   onGenerate() {
     this.status.set('loading');
     this.recipe.set(null);
@@ -28,10 +32,26 @@ export class Generation {
       next: (data) => {
         this.recipe.set(data);
         this.status.set('success');
+        this.generateImage(data.title);
       },
       error: (err) => {
         console.error('Error during generation', err);
         this.status.set('error');
+      },
+    });
+  }
+
+  private generateImage(title: string) {
+    this.isLoadingImage.set(true);
+    this.recipeService.generateImage(title).subscribe({
+      next: (data) => {
+        this.imageBase64.set(data.image_base64);
+        this.imageMimeType.set(data.mime_type);
+        this.isLoadingImage.set(false);
+      },
+      error: (err) => {
+        console.error('Error generating image', err);
+        this.isLoadingImage.set(false);
       },
     });
   }

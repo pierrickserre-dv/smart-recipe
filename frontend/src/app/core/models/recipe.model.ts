@@ -21,3 +21,8 @@ export interface SuccessResponse {
   status: string;
   message: string;
 }
+
+export interface ImageResponse {
+  image_base64: string;
+  mime_type: string;
+}
