@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.auth.dependencies import get_current_user
 from src.recipes.controller import router as recipe_controller
 from src.recipes.schemas import ImageRequest, ImageResponse
 from src.recipes.service import RecipeAIService
-from src.auth.dependencies import get_current_user
 
 app = FastAPI()
 
