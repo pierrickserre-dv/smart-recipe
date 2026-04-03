@@ -43,3 +43,12 @@ class RecipeResponse(BaseModel):
             if not is_staple and not is_allowed:
                 raise ValueError(f"Unauthorized ingredient used: '{ing}'")
         return v
+
+
+class ImageRequest(BaseModel):
+    title: str
+
+
+class ImageResponse(BaseModel):
+    image_base64: str
+    mime_type: str

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RecipeResponse, SaveRecipeResponse } from '../models/recipe.model';
+import { ImageResponse } from '../models/recipe.model';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
@@ -22,5 +23,9 @@ export class RecipeService {
 
   getRecipes(): Observable<RecipeResponse[]> {
     return this.http.get<RecipeResponse[]>(this.baseUrl);
+  }
+
+  generateImage(title: string): Observable<ImageResponse> {
+    return this.http.post<ImageResponse>(`${this.baseUrl}/generate-image`, { title });
   }
 }

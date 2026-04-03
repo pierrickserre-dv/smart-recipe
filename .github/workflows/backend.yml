@@ -1,6 +1,7 @@
 name: Python Quality Control
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - "backend/**"

@@ -3,7 +3,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.auth.dependencies import get_current_user
 from src.auth.schemas import User
 from src.recipes.persistence import FirestoreService
-from src.recipes.schemas import RecipeRequest, RecipeResponse
+from src.recipes.schemas import (
+    ImageRequest,
+    ImageResponse,
+    RecipeRequest,
+    RecipeResponse,
+)
 from src.recipes.service import RecipeAIService
 
 router = APIRouter()
@@ -73,4 +78,17 @@ async def get_recipes(user: User = Depends(get_current_user)):
         raise HTTPException(
             status_code=500,
             detail="An error occured while getting the recipes from the database",
+        )
+
+
+@router.post("/generate-image", response_model=ImageResponse)
+def generate_image(request: ImageRequest, user=Depends(get_current_user)):
+    try:
+        image_base64, mime_type = recipe_service.generate_image(request.title)
+        return ImageResponse(image_base64=image_base64, mime_type=mime_type)
+    except Exception as e:
+        print(f"DEBUG: Image generation error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while generating the recipe image.",
         )
