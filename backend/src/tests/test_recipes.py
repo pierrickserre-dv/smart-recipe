@@ -87,3 +87,30 @@ def test_idempotency_simulation(mocker, override_auth):
     res1 = client.post("/recipes/generate", json={"ingredients": ["salt"]})
     res2 = client.post("/recipes/generate", json={"ingredients": ["salt"]})
     assert res1.json() == res2.json()
+
+
+def test_generate_image_success(mocker, override_auth):
+    mocker.patch(
+        "src.recipes.controller.recipe_service.generate_image",
+        return_value=("aW1hZ2VfZGF0YQ==", "image/jpeg"),
+    )
+    response = client.post("/recipes/generate-image", json={"title": "Pasta Carbonara"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["image_base64"] == "aW1hZ2VfZGF0YQ=="
+    assert data["mime_type"] == "image/jpeg"
+
+
+def test_generate_image_missing_title(override_auth):
+    response = client.post("/recipes/generate-image", json={})
+    assert response.status_code == 422
+
+
+def test_generate_image_service_error(mocker, override_auth):
+    mocker.patch(
+        "src.recipes.controller.recipe_service.generate_image",
+        side_effect=RuntimeError("Imagen API down"),
+    )
+    response = client.post("/recipes/generate-image", json={"title": "Pasta"})
+    assert response.status_code == 500
+    assert "error" in response.json()["detail"].lower()
