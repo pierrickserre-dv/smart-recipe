@@ -26,6 +26,6 @@ export class RecipeService {
   }
 
   generateImage(title: string): Observable<ImageResponse> {
-    return this.http.post<ImageResponse>('/api/generate-image', { title });
+    return this.http.post<ImageResponse>(`${this.baseUrl}/generate-image`, { title });
   }
 }

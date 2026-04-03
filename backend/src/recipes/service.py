@@ -62,7 +62,8 @@ class RecipeAIService:
             f"A beautiful professional food photograph of '{title}'. "
             "The dish is elegantly plated on a ceramic plate, "
             "soft natural lighting, shallow depth of field, "
-            "top-down angle, appetizing and vibrant colors."
+            "top-down angle, appetizing and vibrant colors,"
+            "with no text or logos."
         )
 
         response = self.client.models.generate_images(
