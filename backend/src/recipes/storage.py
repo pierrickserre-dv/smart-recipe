@@ -13,7 +13,11 @@ class CloudStorageService:
         self.bucket = self.client.bucket(settings.storage_bucket)
 
     def upload_recipe_image(
-        self, user_id: str, recipe_id: str, image_base64: str, mime_type: str = "image/jpeg"
+        self,
+        user_id: str,
+        recipe_id: str,
+        image_base64: str,
+        mime_type: str = "image/jpeg",
     ) -> str:
         """Upload a base64-encoded image to Cloud Storage and return its public URL."""
         extension = "jpg" if "jpeg" in mime_type else mime_type.split("/")[-1]
@@ -24,9 +28,7 @@ class CloudStorageService:
 
         content_hash = hashlib.md5(image_bytes).hexdigest()
         blob = self.bucket.blob(blob_name)
-        blob.md5_hash = base64.b64encode(
-            bytes.fromhex(content_hash)
-        ).decode("utf-8")
+        blob.md5_hash = base64.b64encode(bytes.fromhex(content_hash)).decode("utf-8")
 
         blob.upload_from_string(image_bytes, content_type=mime_type)
         blob.make_public()
