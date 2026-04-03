@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
@@ -43,6 +43,16 @@ class RecipeResponse(BaseModel):
             if not is_staple and not is_allowed:
                 raise ValueError(f"Unauthorized ingredient used: '{ing}'")
         return v
+
+
+class SaveRecipeRequest(BaseModel):
+    title: str
+    prep_time: str
+    difficulty: str
+    ingredients_used: List[str]
+    instructions: List[str]
+    image_base64: Optional[str] = None
+    image_mime_type: Optional[str] = None
 
 
 class ImageRequest(BaseModel):

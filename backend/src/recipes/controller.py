@@ -1,3 +1,5 @@
+import hashlib
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.auth.dependencies import get_current_user
@@ -8,13 +10,16 @@ from src.recipes.schemas import (
     ImageResponse,
     RecipeRequest,
     RecipeResponse,
+    SaveRecipeRequest,
 )
 from src.recipes.service import RecipeAIService
+from src.recipes.storage import CloudStorageService
 
 router = APIRouter()
 
 recipe_service = RecipeAIService()
 firestore = FirestoreService()
+cloud_storage = CloudStorageService()
 
 
 @router.post("/generate", response_model=RecipeResponse)
@@ -36,16 +41,36 @@ async def generate_recipe_endpoint(
 
 
 @router.post("/save")
-async def save_recipe(request: RecipeResponse, user: User = Depends(get_current_user)):
+async def save_recipe(
+    request: SaveRecipeRequest, user: User = Depends(get_current_user)
+):
     try:
-        recipe_id = await firestore.save_recipe_for_user(user.uid, request)
+        image_url = None
+        recipe_id_preview = hashlib.md5(
+            request.title.lower().strip().encode()
+        ).hexdigest()
+
+        if request.image_base64 and request.image_mime_type:
+            try:
+                image_url = cloud_storage.upload_recipe_image(
+                    user_id=user.uid,
+                    recipe_id=recipe_id_preview,
+                    image_base64=request.image_base64,
+                    mime_type=request.image_mime_type,
+                )
+            except Exception as e:
+                print(f"DEBUG: Image upload failed (non-fatal): {e}")
+
+        recipe_id = await firestore.save_recipe_for_user(
+            user.uid, request, image_url=image_url
+        )
         return {
             "status": "success",
             "message": "Recipe saved successfully",
             "id": recipe_id,
         }
     except Exception as e:
-        print(f"DEBUG: Firestore Error: {e}")
+        print(f"DEBUG: Save Error: {e}")
         raise HTTPException(
             status_code=500,
             detail="An error occurred while saving the recipe to the database.",
@@ -55,13 +80,15 @@ async def save_recipe(request: RecipeResponse, user: User = Depends(get_current_
 @router.delete("/{recipe_id}")
 async def delete_recipe(recipe_id: str, user: User = Depends(get_current_user)):
     try:
-        await firestore.delete_recipe_for_user(user.uid, recipe_id)
+        image_url = await firestore.delete_recipe_for_user(user.uid, recipe_id)
+        if image_url:
+            cloud_storage.delete_recipe_image(image_url)
         return {
             "status": "success",
             "message": f"Recipe {recipe_id} deleted successfully",
         }
     except Exception as e:
-        print(f"DEBUG: Firestore Error: {e}")
+        print(f"DEBUG: Delete Error: {e}")
         raise HTTPException(
             status_code=500,
             detail="An error occurred while deleting the recipe from the database.",

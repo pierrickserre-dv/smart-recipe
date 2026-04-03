@@ -2,11 +2,12 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
+import { RecipeCard } from '../../components/recipe-card/recipe-card';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RecipeCard],
   templateUrl: './favorites.html',
   styleUrl: './favorites.css',
 })
@@ -46,18 +47,17 @@ export class Favorites implements OnInit {
         if (this.selectedRecipe()?.id === recipeId) {
           this.selectedRecipe.set(null);
         }
-        this.recipes.set(
-          this.recipes().filter((r) => {
-            console.log('Comparison:', r.id, 'with', recipeId);
-            return r.id !== recipeId;
-          }),
-        );
+        this.recipes.set(this.recipes().filter((r) => r.id !== recipeId));
       },
     });
   }
 
   onSelected(recipe: RecipeResponse) {
     this.selectedRecipe.set(recipe);
+  }
+
+  closeDetail() {
+    this.selectedRecipe.set(null);
   }
 
   onFilterChange(event: Event) {
