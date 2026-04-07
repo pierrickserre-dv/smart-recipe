@@ -9,6 +9,17 @@ export interface RecipeResponse {
   difficulty: string;
   ingredients_used: string[];
   instructions: string[];
+  image_url?: string;
+}
+
+export interface SaveRecipeRequest {
+  title: string;
+  prep_time: string;
+  difficulty: string;
+  ingredients_used: string[];
+  instructions: string[];
+  image_base64?: string;
+  image_mime_type?: string;
 }
 
 export interface SaveRecipeResponse {

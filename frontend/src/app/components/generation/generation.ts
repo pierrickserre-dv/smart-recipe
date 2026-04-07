@@ -1,6 +1,6 @@
 import { Component, inject, Input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { RecipeResponse } from '../../core/models/recipe.model';
+import { RecipeResponse, SaveRecipeRequest } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 
 export type GenerationStatus = 'idle' | 'loading' | 'success' | 'saving' | 'saved' | 'error';
@@ -62,7 +62,17 @@ export class Generation {
     if (currentRecipe && this.status() !== 'saved') {
       this.status.set('saving');
 
-      this.recipeService.saveRecipe(currentRecipe).subscribe({
+      const saveRequest: SaveRecipeRequest = {
+        title: currentRecipe.title,
+        prep_time: currentRecipe.prep_time,
+        difficulty: currentRecipe.difficulty,
+        ingredients_used: currentRecipe.ingredients_used,
+        instructions: currentRecipe.instructions,
+        image_base64: this.imageBase64() ?? undefined,
+        image_mime_type: this.imageBase64() ? this.imageMimeType() : undefined,
+      };
+
+      this.recipeService.saveRecipe(saveRequest).subscribe({
         next: (response) => {
           console.log('Recipe saved with ID: ', response.id);
           this.status.set('saved');

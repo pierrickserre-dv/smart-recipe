@@ -1,35 +1,42 @@
-<div class="card">
-  <div class="recipe-card">
-    <header class="recipe-header">
-      <button (click)="onDelete()">🗑️ Supprimer</button>
-      <h2>{{ recipe().title }}</h2>
-      <div class="meta-tags">
-        <span class="tag"><i class="icon">⏱</i> {{ recipe().prep_time }}</span>
-        <span class="tag"><i class="icon">📊</i> {{ recipe().difficulty }}</span>
+<div class="card" (click)="onSelect()" role="button" tabindex="0" (keydown.enter)="onSelect()">
+  <div class="card-image">
+    @if (recipe().image_url) {
+      <img [src]="recipe().image_url" [alt]="recipe().title" />
+    } @else {
+      <div class="card-icon-placeholder">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
+            fill="none"
+            stroke="none"
+          />
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+          <line x1="6" y1="1" x2="6" y2="4" />
+          <line x1="10" y1="1" x2="10" y2="4" />
+          <line x1="14" y1="1" x2="14" y2="4" />
+        </svg>
       </div>
-    </header>
+    }
+  </div>
 
-    <div class="recipe-content">
-      <aside class="ingredients-sidebar">
-        <h3>Ingredients</h3>
-        <ul class="ing-list">
-          @for (ing of recipe().ingredients_used; track $index) {
-            <li><span class="check">✓</span> {{ ing }}</li>
-          }
-        </ul>
-      </aside>
-
-      <main class="instructions-main">
-        <h3>Instructions</h3>
-        <ol class="steps-list">
-          @for (step of recipe().instructions; track $index) {
-            <li>
-              <span class="step-number">{{ $index + 1 }}</span>
-              <p>{{ step }}</p>
-            </li>
-          }
-        </ol>
-      </main>
+  <div class="card-body">
+    <h3 class="card-title">{{ recipe().title }}</h3>
+    <div class="card-meta">
+      <span class="tag">⏱ {{ recipe().prep_time }}</span>
+      <span class="tag">📊 {{ recipe().difficulty }}</span>
     </div>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn-delete" (click)="onDelete($event)">🗑️ Delete</button>
   </div>
 </div>

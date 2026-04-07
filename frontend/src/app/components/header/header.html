@@ -7,8 +7,8 @@
 
   <div class="menu-items">
     @if (!authService.user()) {
-      <a routerLink="/welcome" class="nav-link">Se connecter</a>
-      <a routerLink="/welcome/register" class="nav-link btn-register">Créer un compte</a>
+      <a routerLink="/welcome" class="nav-link">Login</a>
+      <a routerLink="/welcome/register" class="nav-link btn-register">Create Account</a>
     } @else {
       <button routerLink="/favorites" class="btn-nav">Saved Recipes</button>
       <span class="user-email">{{ authService.user()?.email }}</span>
