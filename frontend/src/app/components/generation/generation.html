@@ -5,9 +5,7 @@
         class="save-button"
         [class.saved]="status() === 'saved'"
         (click)="onSave()"
-        [disabled]="
-          status() === 'saving' || status() === 'saved' || isRegenerating()
-        "
+        [disabled]="status() === 'saving' || status() === 'saved' || isRegenerating()"
       >
         <span>
           @if (status() === 'saved') {
@@ -61,8 +59,7 @@
         <aside class="ingredients-sidebar">
           <h3>Ingredients</h3>
           <p class="ingredients-hint">
-            Tap an ingredient to exclude it from the next alternative. Tap again to
-            include it.
+            Tap an ingredient to exclude it from the next alternative. Tap again to include it.
           </p>
           <ul class="ing-list">
             @for (ing of r.ingredients_used; track $index) {
@@ -93,8 +90,7 @@
                 placeholder="e.g. basil, cream…"
                 [disabled]="isRegenerating()"
                 (keyup.enter)="
-                  addExtraIngredient(extraIngredientInput.value);
-                  extraIngredientInput.value = ''
+                  addExtraIngredient(extraIngredientInput.value); extraIngredientInput.value = ''
                 "
               />
               <button
@@ -102,8 +98,7 @@
                 class="alternative-add-btn"
                 [disabled]="isRegenerating()"
                 (click)="
-                  addExtraIngredient(extraIngredientInput.value);
-                  extraIngredientInput.value = ''
+                  addExtraIngredient(extraIngredientInput.value); extraIngredientInput.value = ''
                 "
               >
                 Add
@@ -130,19 +125,13 @@
             <button
               type="button"
               class="btn-generate-alternative"
-              [disabled]="
-                isRegenerating() || effectiveIngredientsForAlternative().length === 0
-              "
+              [disabled]="isRegenerating() || effectiveIngredientsForAlternative().length === 0"
               (click)="onGenerateAlternative()"
             >
               @if (isRegenerating()) {
                 <span class="spinner"></span>
               }
-              {{
-                isRegenerating()
-                  ? 'Generating…'
-                  : 'Generate alternative'
-              }}
+              {{ isRegenerating() ? 'Generating…' : 'Generate alternative' }}
             </button>
           </div>
         </aside>

@@ -82,9 +82,7 @@ export class Generation {
     const removed = this.removedIngredientIndices();
     const fromRecipe = r.ingredients_used.filter((_, i) => !removed.has(i));
     const extra = this.additionalIngredients();
-    const merged = [...fromRecipe, ...extra]
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const merged = [...fromRecipe, ...extra].map((s) => s.trim()).filter(Boolean);
 
     const seen = new Set<string>();
     const out: string[] = [];
@@ -168,11 +166,7 @@ export class Generation {
   onSave() {
     const currentRecipe = this.recipe();
 
-    if (
-      currentRecipe &&
-      this.status() !== 'saved' &&
-      !this.isRegenerating()
-    ) {
+    if (currentRecipe && this.status() !== 'saved' && !this.isRegenerating()) {
       this.status.set('saving');
 
       const saveRequest: SaveRecipeRequest = {
