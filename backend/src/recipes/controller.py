@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from src.auth.dependencies import get_current_user
 from src.auth.schemas import User
+from src.config import settings
 from src.recipes.persistence import FirestoreService
 from src.recipes.schemas import (
     ImageRequest,
@@ -13,13 +14,14 @@ from src.recipes.schemas import (
     SaveRecipeRequest,
 )
 from src.recipes.service import RecipeAIService
-from src.recipes.storage import CloudStorageService
+from src.recipes.storage import delete_recipe_image, upload_recipe_image
+from src.storage.google_storage import GoogleStorageService
 
 router = APIRouter()
 
 recipe_service = RecipeAIService()
 firestore = FirestoreService()
-cloud_storage = CloudStorageService()
+gcs = GoogleStorageService(settings.storage_bucket)
 
 
 @router.post("/generate", response_model=RecipeResponse)
@@ -52,7 +54,8 @@ async def save_recipe(
 
         if request.image_base64 and request.image_mime_type:
             try:
-                image_url = cloud_storage.upload_recipe_image(
+                image_url = upload_recipe_image(
+                    gcs,
                     user_id=user.uid,
                     recipe_id=recipe_id_preview,
                     image_base64=request.image_base64,
@@ -82,7 +85,7 @@ async def delete_recipe(recipe_id: str, user: User = Depends(get_current_user)):
     try:
         image_url = await firestore.delete_recipe_for_user(user.uid, recipe_id)
         if image_url:
-            cloud_storage.delete_recipe_image(image_url)
+            delete_recipe_image(gcs, image_url)
         return {
             "status": "success",
             "message": f"Recipe {recipe_id} deleted successfully",

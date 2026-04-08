@@ -2,44 +2,32 @@ import base64
 import hashlib
 import uuid
 
-from google.cloud import storage
-
-from src.config import settings
+from src.storage.google_storage import GoogleStorageService
 
 
-class CloudStorageService:
-    def __init__(self):
-        self.client = storage.Client()
-        self.bucket = self.client.bucket(settings.storage_bucket)
+def upload_recipe_image(
+    gcs: GoogleStorageService,
+    user_id: str,
+    recipe_id: str,
+    image_base64: str,
+    mime_type: str = "image/jpeg",
+) -> str:
+    """Upload a base64-encoded image and return its public URL."""
+    extension = "jpg" if "jpeg" in mime_type else mime_type.split("/")[-1]
+    unique_suffix = uuid.uuid4().hex[:8]
+    object_name = f"recipes/{user_id}/{recipe_id}_{unique_suffix}.{extension}"
 
-    def upload_recipe_image(
-        self,
-        user_id: str,
-        recipe_id: str,
-        image_base64: str,
-        mime_type: str = "image/jpeg",
-    ) -> str:
-        """Upload a base64-encoded image to Cloud Storage and return its public URL."""
-        extension = "jpg" if "jpeg" in mime_type else mime_type.split("/")[-1]
-        unique_suffix = uuid.uuid4().hex[:8]
-        blob_name = f"recipes/{user_id}/{recipe_id}_{unique_suffix}.{extension}"
+    image_bytes = base64.b64decode(image_base64)
+    md5_hex = hashlib.md5(image_bytes).hexdigest()
 
-        image_bytes = base64.b64decode(image_base64)
+    return gcs.upload_bytes_make_public(
+        object_name,
+        image_bytes,
+        mime_type,
+        md5_hex=md5_hex,
+    )
 
-        content_hash = hashlib.md5(image_bytes).hexdigest()
-        blob = self.bucket.blob(blob_name)
-        blob.md5_hash = base64.b64encode(bytes.fromhex(content_hash)).decode("utf-8")
 
-        blob.upload_from_string(image_bytes, content_type=mime_type)
-        blob.make_public()
-
-        return blob.public_url
-
-    def delete_recipe_image(self, image_url: str) -> None:
-        """Delete an image from Cloud Storage by its public URL."""
-        try:
-            blob_name = image_url.split(f"{settings.storage_bucket}/")[-1]
-            blob = self.bucket.blob(blob_name)
-            blob.delete()
-        except Exception:
-            pass
+def delete_recipe_image(gcs: GoogleStorageService, image_url: str) -> None:
+    """Delete a recipe image from storage using its public URL."""
+    gcs.delete_by_public_url(image_url)
