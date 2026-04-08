@@ -24,7 +24,16 @@ export class Generation {
   imageMimeType = signal<string>('image/jpeg');
   isLoadingImage = signal(false);
 
+  /** Indices of recipe ingredients excluded from the next alternative generation. */
+  removedIngredientIndices = signal<Set<number>>(new Set());
+
+  /** Extra ingredients the user adds for the next alternative (not shown in the current recipe list). */
+  additionalIngredients = signal<string[]>([]);
+
+  isRegenerating = signal(false);
+
   onGenerate() {
+    this.resetIngredientEditing();
     this.status.set('loading');
     this.recipe.set(null);
 
@@ -41,7 +50,105 @@ export class Generation {
     });
   }
 
+  private resetIngredientEditing(): void {
+    this.removedIngredientIndices.set(new Set());
+    this.additionalIngredients.set([]);
+  }
+
+  toggleIngredientRemoval(index: number): void {
+    if (this.isRegenerating()) {
+      return;
+    }
+    this.removedIngredientIndices.update((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  }
+
+  isIngredientRemoved(index: number): boolean {
+    return this.removedIngredientIndices().has(index);
+  }
+
+  effectiveIngredientsForAlternative(): string[] {
+    const r = this.recipe();
+    if (!r) {
+      return [];
+    }
+    const removed = this.removedIngredientIndices();
+    const fromRecipe = r.ingredients_used.filter((_, i) => !removed.has(i));
+    const extra = this.additionalIngredients();
+    const merged = [...fromRecipe, ...extra].map((s) => s.trim()).filter(Boolean);
+
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const item of merged) {
+      const key = item.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        out.push(item);
+      }
+    }
+    return out;
+  }
+
+  addExtraIngredient(raw: string): void {
+    if (this.isRegenerating()) {
+      return;
+    }
+    const name = raw.trim();
+    if (!name) {
+      return;
+    }
+    const key = name.toLowerCase();
+    const r = this.recipe();
+    const fromRecipe = r
+      ? r.ingredients_used.filter((_, i) => !this.removedIngredientIndices().has(i))
+      : [];
+    if (
+      fromRecipe.some((x) => x.toLowerCase() === key) ||
+      this.additionalIngredients().some((x) => x.toLowerCase() === key)
+    ) {
+      return;
+    }
+    this.additionalIngredients.update((list) => [...list, name]);
+  }
+
+  removeAdditionalIngredient(index: number): void {
+    if (this.isRegenerating()) {
+      return;
+    }
+    this.additionalIngredients.update((list) => list.filter((_, i) => i !== index));
+  }
+
+  onGenerateAlternative(): void {
+    const ings = this.effectiveIngredientsForAlternative();
+    if (ings.length === 0 || this.isRegenerating()) {
+      return;
+    }
+    this.isRegenerating.set(true);
+    this.recipeService.generateRecipe(ings).subscribe({
+      next: (data) => {
+        this.resetIngredientEditing();
+        this.recipe.set(data);
+        this.status.set('success');
+        this.isRegenerating.set(false);
+        this.generateImage(data.title);
+      },
+      error: (err) => {
+        console.error('Error during alternative generation', err);
+        this.isRegenerating.set(false);
+        this.status.set('error');
+      },
+    });
+  }
+
   private generateImage(title: string) {
+    this.imageBase64.set(null);
     this.isLoadingImage.set(true);
     this.recipeService.generateImage(title).subscribe({
       next: (data) => {
@@ -59,7 +166,7 @@ export class Generation {
   onSave() {
     const currentRecipe = this.recipe();
 
-    if (currentRecipe && this.status() !== 'saved') {
+    if (currentRecipe && this.status() !== 'saved' && !this.isRegenerating()) {
       this.status.set('saving');
 
       const saveRequest: SaveRecipeRequest = {

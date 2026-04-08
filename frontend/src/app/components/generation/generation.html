@@ -5,7 +5,7 @@
         class="save-button"
         [class.saved]="status() === 'saved'"
         (click)="onSave()"
-        [disabled]="status() === 'saving' || status() === 'saved'"
+        [disabled]="status() === 'saving' || status() === 'saved' || isRegenerating()"
       >
         <span>
           @if (status() === 'saved') {
@@ -25,8 +25,14 @@
     </div>
   }
 
-  @if (recipe() && status() !== 'loading') {
-    <div class="recipe-card">
+  @if (recipe(); as r) {
+    <div class="recipe-card" [class.regenerating]="isRegenerating()">
+      @if (isRegenerating()) {
+        <div class="regenerating-banner" role="status" aria-live="polite">
+          <span class="spinner spinner-inline"></span>
+          Creating a new version…
+        </div>
+      }
       <header class="recipe-header">
         @if (isLoadingImage()) {
           <div class="image-placeholder">
@@ -37,32 +43,103 @@
           <div class="recipe-image-wrapper">
             <img
               [src]="'data:' + imageMimeType() + ';base64,' + imageBase64()"
-              [alt]="recipe()?.title"
+              [alt]="r.title"
               class="recipe-image"
             />
           </div>
         }
-        <h2>{{ recipe()?.title }}</h2>
+        <h2>{{ r.title }}</h2>
         <div class="meta-tags">
-          <span class="tag"><i class="icon">⏱</i> {{ recipe()?.prep_time }}</span>
-          <span class="tag"><i class="icon">📊</i> {{ recipe()?.difficulty }}</span>
+          <span class="tag"><i class="icon">⏱</i> {{ r.prep_time }}</span>
+          <span class="tag"><i class="icon">📊</i> {{ r.difficulty }}</span>
         </div>
       </header>
 
       <div class="recipe-content">
         <aside class="ingredients-sidebar">
           <h3>Ingredients</h3>
+          <p class="ingredients-hint">
+            Tap an ingredient to exclude it from the next alternative. Tap again to include it.
+          </p>
           <ul class="ing-list">
-            @for (ing of recipe()?.ingredients_used; track $index) {
-              <li><span class="check">✓</span> {{ ing }}</li>
+            @for (ing of r.ingredients_used; track $index) {
+              <li
+                class="clickable-ingredient"
+                [class.ing-disabled]="isRegenerating()"
+                [class.barred]="isIngredientRemoved($index)"
+                [attr.aria-pressed]="isIngredientRemoved($index)"
+                role="button"
+                tabindex="0"
+                (click)="toggleIngredientRemoval($index)"
+                (keydown.enter)="toggleIngredientRemoval($index)"
+                (keydown.space)="$event.preventDefault(); toggleIngredientRemoval($index)"
+              >
+                <span class="check">{{ isIngredientRemoved($index) ? '✕' : '✓' }}</span>
+                {{ ing }}
+              </li>
             }
           </ul>
+
+          <div class="alternative-ingredients-block">
+            <h4 class="alternative-subtitle">Add ingredients</h4>
+            <div class="alternative-input-row">
+              <input
+                #extraIngredientInput
+                type="text"
+                class="alternative-input"
+                placeholder="e.g. basil, cream…"
+                [disabled]="isRegenerating()"
+                (keyup.enter)="
+                  addExtraIngredient(extraIngredientInput.value); extraIngredientInput.value = ''
+                "
+              />
+              <button
+                type="button"
+                class="alternative-add-btn"
+                [disabled]="isRegenerating()"
+                (click)="
+                  addExtraIngredient(extraIngredientInput.value); extraIngredientInput.value = ''
+                "
+              >
+                Add
+              </button>
+            </div>
+            @if (additionalIngredients().length > 0) {
+              <ul class="extra-ing-chips">
+                @for (extra of additionalIngredients(); track $index) {
+                  <li class="extra-ing-chip">
+                    <span>{{ extra }}</span>
+                    <button
+                      type="button"
+                      class="extra-ing-remove"
+                      [disabled]="isRegenerating()"
+                      (click)="removeAdditionalIngredient($index)"
+                      aria-label="Remove {{ extra }}"
+                    >
+                      ×
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+            <button
+              type="button"
+              class="btn-generate-alternative"
+              [disabled]="isRegenerating() || effectiveIngredientsForAlternative().length === 0"
+              (click)="onGenerateAlternative()"
+            >
+              @if (isRegenerating()) {
+                <span class="spinner"></span>
+              }
+              {{ isRegenerating() ? 'Generating…' : 'Generate alternative' }}
+            </button>
+          </div>
         </aside>
 
         <main class="instructions-main">
           <h3>Instructions</h3>
           <ol class="steps-list">
-            @for (step of recipe()?.instructions; track $index) {
+            @for (step of r.instructions; track $index) {
               <li>
                 <span class="step-number">{{ $index + 1 }}</span>
                 <p>{{ step }}</p>

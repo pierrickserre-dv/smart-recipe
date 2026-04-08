@@ -6,11 +6,11 @@
 
 ## Fonctionnalités
 
-* **Authentification Sécurisée** : Inscription et connexion gérées par Firebase Auth (Tokens JWT).
-* **Gestion Dynamique des Ingrédients** : Interface fluide pour ajouter et supprimer vos ingrédients en temps réel.
-* **Génération de Recettes par IA** : Utilisation de **Gemini 2.5 Flash** pour créer des recettes complètes (Titre, Temps, Difficulté, Ingrédients, Instructions).
-* **Régénération Intelligente** : Possibilité de générer une nouvelle variante de recette sans modifier votre sélection d'ingrédients, même si le panier est vidé.
-* **Expérience Utilisateur (UX)** : Design "Dark Mode" épuré avec des composants réactifs, animations fluides et boutons contextuels.
+- **Authentification Sécurisée** : Inscription et connexion gérées par Firebase Auth (Tokens JWT).
+- **Gestion Dynamique des Ingrédients** : Interface fluide pour ajouter et supprimer vos ingrédients en temps réel.
+- **Génération de Recettes par IA** : Utilisation de **Gemini 2.5 Flash** pour créer des recettes complètes (Titre, Temps, Difficulté, Ingrédients, Instructions).
+- **Régénération Intelligente** : Possibilité de générer une nouvelle variante de recette sans modifier votre sélection d'ingrédients, même si le panier est vidé.
+- **Expérience Utilisateur (UX)** : Design "Dark Mode" épuré avec des composants réactifs, animations fluides et boutons contextuels.
 
 ---
 
@@ -18,16 +18,16 @@
 
 ### Backend
 
-* **Framework** : FastAPI (Python 3.12)
-* **IA** : Google GenAI SDK (Modèle : `gemini-2.5-flash`)
-* **Sécurité** : Firebase Admin SDK (Vérification des Tokens en header via Interceptor)
-* **Serveur** : Uvicorn
+- **Framework** : FastAPI (Python 3.12)
+- **IA** : Google GenAI SDK (Modèle : `gemini-2.5-flash`)
+- **Sécurité** : Firebase Admin SDK (Vérification des Tokens en header via Interceptor)
+- **Serveur** : Uvicorn
 
 ### Frontend
 
-* **Framework** : Angular 21.1.5 (Signals, Standalone Components)
-* **Authentification** : Firebase Auth
-* **Design** : CSS3 moderne (Flexbox, CSS Variables, Animations @keyframes)
+- **Framework** : Angular 21.1.5 (Signals, Standalone Components)
+- **Authentification** : Firebase Auth
+- **Design** : CSS3 moderne (Flexbox, CSS Variables, Animations @keyframes)
 
 ---
 
@@ -80,13 +80,13 @@ Configurez vos clés Firebase dans `src/environments/environment.local.ts` :
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "VOTRE_API_KEY",
-    authDomain: "VOTRE_AUTH_DOMAIN",
-    projectId: "VOTRE_PROJECT_ID",
-    storageBucket: "VOTRE_STORAGE_BUCKET",
-    messagingSenderId: "VOTRE_SENDER_ID",
-    appId: "VOTRE_APP_ID"
-  }
+    apiKey: 'VOTRE_API_KEY',
+    authDomain: 'VOTRE_AUTH_DOMAIN',
+    projectId: 'VOTRE_PROJECT_ID',
+    storageBucket: 'VOTRE_STORAGE_BUCKET',
+    messagingSenderId: 'VOTRE_SENDER_ID',
+    appId: 'VOTRE_APP_ID',
+  },
 };
 ```
 
@@ -102,9 +102,9 @@ ng serve
 
 Le projet utilise un système de branches par fonctionnalité pour garantir la stabilité du code :
 
-* `main` : Branche stable de production.
-* `feat/auth` : Authentification et sécurité Firebase.
-* `feat/recipe-generation-frontend` : Logique d'interface et intégration de la génération.
+- `main` : Branche stable de production.
+- `feat/auth` : Authentification et sécurité Firebase.
+- `feat/recipe-generation-frontend` : Logique d'interface et intégration de la génération.
 
 ### Astuce Git (Changement de branche avec modifications en cours)
 
@@ -129,9 +129,9 @@ pytest
 
 ## Roadmap
 
-* [ ] Persistance des recettes générées dans Firebase Firestore.
-* [ ] Ajout de filtres par régimes alimentaires (Végétarien, Sans Gluten, Allergies).
-* [ ] Exportation des recettes au format PDF.
-* [ ] Système de notation et de sauvegarde des recettes préférées.
+- [ ] Persistance des recettes générées dans Firebase Firestore.
+- [ ] Ajout de filtres par régimes alimentaires (Végétarien, Sans Gluten, Allergies).
+- [ ] Exportation des recettes au format PDF.
+- [ ] Système de notation et de sauvegarde des recettes préférées.
 
 ---
