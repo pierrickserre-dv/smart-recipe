@@ -245,11 +245,16 @@ h1 {
 
 /* ---------- Recipe detail inside overlay ---------- */
 
+h3 {
+  color: white;
+}
+
 .recipe-header {
   padding: 40px;
   background: var(--bg-dark);
   border-bottom: 1px solid var(--border-grey);
   text-align: center;
+  color: white;
 }
 
 .meta-tags {
@@ -334,7 +339,8 @@ h1 {
 
 .step-number {
   background: var(--primary-green);
-  color: var(--text-dark);
+  /* color: var(--text-dark); */
+  color: white;
   min-width: 28px;
   height: 28px;
   border-radius: 50%;
