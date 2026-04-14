@@ -1,4 +1,4 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, ElementRef, inject, Input, signal, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RecipeResponse, SaveRecipeRequest } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
@@ -14,6 +14,7 @@ export type GenerationStatus = 'idle' | 'loading' | 'success' | 'saving' | 'save
 })
 export class Generation {
   @Input() ingredients: string[] = [];
+  @ViewChild('recipeCard') recipeCardRef?: ElementRef<HTMLElement>;
 
   recipe = signal<RecipeResponse | null>(null);
 
@@ -33,6 +34,8 @@ export class Generation {
 
   isRegenerating = signal(false);
 
+  private pendingScroll = false;
+
   onGenerate() {
     this.resetIngredientEditing();
     this.status.set('loading');
@@ -43,6 +46,7 @@ export class Generation {
         this.recipe.set(data);
         this.status.set('success');
         this.generateImage(data.title);
+        this.scrollToRecipeCardAfterRender();
       },
       error: (err) => {
         console.error('Error during generation', err);
@@ -139,6 +143,7 @@ export class Generation {
         this.status.set('success');
         this.isRegenerating.set(false);
         this.generateImage(data.title);
+        this.scrollToRecipeCardAfterRender();
       },
       error: (err) => {
         console.error('Error during alternative generation', err);
@@ -161,6 +166,18 @@ export class Generation {
         console.error('Error generating image', err);
         this.isLoadingImage.set(false);
       },
+    });
+  }
+
+  private scrollToRecipeCardAfterRender(): void {
+    this.pendingScroll = true;
+    requestAnimationFrame(() => {
+      const card = this.recipeCardRef?.nativeElement;
+      if (!card) {
+        return;
+      }
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      this.pendingScroll = false;
     });
   }
 

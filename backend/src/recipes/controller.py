@@ -37,7 +37,7 @@ async def generate_recipe_endpoint(
         return recipe_data
     except Exception as e:
         raise HTTPException(
-            status_code=500,
+            status_code=503,
             detail=f"Error: The AI couldn't generate a recipe. {str(e)}",
         )
 
@@ -75,7 +75,7 @@ async def save_recipe(
     except Exception as e:
         print(f"DEBUG: Save Error: {e}")
         raise HTTPException(
-            status_code=500,
+            status_code=503,
             detail="An error occurred while saving the recipe to the database.",
         )
 
@@ -93,7 +93,7 @@ async def delete_recipe(recipe_id: str, user: User = Depends(get_current_user)):
     except Exception as e:
         print(f"DEBUG: Delete Error: {e}")
         raise HTTPException(
-            status_code=500,
+            status_code=503,
             detail="An error occurred while deleting the recipe from the database.",
         )
 
@@ -106,7 +106,7 @@ async def get_recipes(user: User = Depends(get_current_user)):
     except Exception as e:
         print(f"DEBUG: Firestore Error: {e}")
         raise HTTPException(
-            status_code=500,
+            status_code=503,
             detail="An error occured while getting the recipes from the database",
         )
 
@@ -119,6 +119,6 @@ def generate_image(request: ImageRequest, user=Depends(get_current_user)):
     except Exception as e:
         print(f"DEBUG: Image generation error: {e}")
         raise HTTPException(
-            status_code=500,
+            status_code=503,
             detail="An error occurred while generating the recipe image.",
         )
