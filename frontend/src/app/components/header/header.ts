@@ -14,7 +14,7 @@ export class Header {
   public authService = inject(AuthService);
   private translateService = inject(TranslateService);
 
-    /**
+  /**
    * Change la langue de l'application
    * Cette méthode met à jour la langue courante et recharge les traductions
    * @param lang - Le code de la langue (ex: 'fr', 'en')
