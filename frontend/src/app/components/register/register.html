@@ -1,19 +1,33 @@
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="auth-card">
-  <h2>Register</h2>
+  <h2>{{ 'auth.register.title' | translate }}</h2>
   <div class="input-group">
-    <input type="string" formControlName="email" placeholder="Email" />
+    <input
+      type="string"
+      formControlName="email"
+      [placeholder]="'auth.register.email-placeholder' | translate"
+    />
     @if (profileForm.get('email')?.touched && profileForm.get('email')?.errors?.['email']) {
-      <p class="error">Invalid email</p>
+      <p class="error">{{ 'auth.register.email-error' | translate }}</p>
     }
-    <input type="password" formControlName="password" placeholder="Password" />
+
+    <input
+      type="password"
+      formControlName="password"
+      [placeholder]="'auth.register.password-placeholder' | translate"
+    />
     @if (
       profileForm.get('password')?.touched && profileForm.get('password')?.errors?.['minlength']
     ) {
-      <p class="error">Le mot de passe doit faire au moins 8 caractères.</p>
+      <p class="error">{{ 'auth.register.password-error' | translate }}</p>
     }
   </div>
-  <button type="submit" class="auth-btn">Register</button>
+
+  <button type="submit" class="auth-btn">{{ 'auth.register.submit-btn' | translate }}</button>
+
   <p class="no-account">
-    Already have an account ? <a class="createaccount-btn" href="/welcome/login">Login</a>
+    {{ 'auth.register.already-account' | translate }}
+    <a class="createaccount-btn" href="/welcome/login">
+      {{ 'auth.register.login-link' | translate }}
+    </a>
   </p>
 </form>
