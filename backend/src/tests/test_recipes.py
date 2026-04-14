@@ -58,7 +58,7 @@ def test_service_returns_incorrect_types(mocker, override_auth):
         return_value=bad_type_data,
     )
     response = client.post("/recipes/generate", json={"ingredients": ["water"]})
-    assert response.status_code == 500
+    assert response.status_code == 503
 
 
 def test_service_unhandled_error(mocker, override_auth):
@@ -67,7 +67,7 @@ def test_service_unhandled_error(mocker, override_auth):
         side_effect=RuntimeError("API Crash"),
     )
     response = client.post("/recipes/generate", json={"ingredients": ["water"]})
-    assert response.status_code == 500
+    assert response.status_code == 503
     assert "error" in response.json()["detail"].lower()
 
 
@@ -112,5 +112,5 @@ def test_generate_image_service_error(mocker, override_auth):
         side_effect=RuntimeError("Imagen API down"),
     )
     response = client.post("/recipes/generate-image", json={"title": "Pasta"})
-    assert response.status_code == 500
+    assert response.status_code == 503
     assert "error" in response.json()["detail"].lower()
