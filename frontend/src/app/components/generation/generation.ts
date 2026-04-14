@@ -2,12 +2,13 @@ import { Component, inject, Input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RecipeResponse, SaveRecipeRequest } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export type GenerationStatus = 'idle' | 'loading' | 'success' | 'saving' | 'saved' | 'error';
 
 @Component({
   selector: 'app-generation',
-  imports: [RouterLink],
+  imports: [RouterLink, TranslateModule],
   templateUrl: './generation.html',
   styleUrl: './generation.css',
 })

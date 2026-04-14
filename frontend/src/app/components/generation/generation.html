@@ -16,12 +16,18 @@
         </span>
 
         @if (status() === 'saved') {
-          Saved
+          {{ 'generation.saving.saved' | translate }}
         } @else {
-          {{ status() === 'saving' ? 'Loading...' : 'Save recipe' }}
+          {{
+            status() === 'saving'
+              ? ('generation.saving.save-loading' | translate)
+              : ('generation.saving.save' | translate)
+          }}
         }
       </button>
-      <button class="see-button" routerLink="/favorites">See saved recipes</button>
+      <button class="see-button" routerLink="/favorites">
+        {{ 'generation.saving.see-saved' | translate }}
+      </button>
     </div>
   }
 
@@ -30,14 +36,14 @@
       @if (isRegenerating()) {
         <div class="regenerating-banner" role="status" aria-live="polite">
           <span class="spinner spinner-inline"></span>
-          Creating a new version…
+          {{ 'generation.generating.new-version' | translate }}
         </div>
       }
       <header class="recipe-header">
         @if (isLoadingImage()) {
           <div class="image-placeholder">
             <span class="spinner"></span>
-            <p>Generating preview...</p>
+            <p>{{ 'generation.generating.preview' | translate }}</p>
           </div>
         } @else if (imageBase64()) {
           <div class="recipe-image-wrapper">
@@ -57,9 +63,9 @@
 
       <div class="recipe-content">
         <aside class="ingredients-sidebar">
-          <h3>Ingredients</h3>
+          <h3>{{ 'generation.generating.ingredients-title' | translate }}</h3>
           <p class="ingredients-hint">
-            Tap an ingredient to exclude it from the next alternative. Tap again to include it.
+            {{ 'generation.generating.alternative' | translate }}
           </p>
           <ul class="ing-list">
             @for (ing of r.ingredients_used; track $index) {
@@ -81,13 +87,15 @@
           </ul>
 
           <div class="alternative-ingredients-block">
-            <h4 class="alternative-subtitle">Add ingredients</h4>
+            <h4 class="alternative-subtitle">
+              {{ 'generation.generating.add-ingredients' | translate }}
+            </h4>
             <div class="alternative-input-row">
               <input
                 #extraIngredientInput
                 type="text"
                 class="alternative-input"
-                placeholder="e.g. basil, cream…"
+                [placeholder]="'generation.generating.placeholder-extra' | translate"
                 [disabled]="isRegenerating()"
                 (keyup.enter)="
                   addExtraIngredient(extraIngredientInput.value); extraIngredientInput.value = ''
@@ -101,7 +109,7 @@
                   addExtraIngredient(extraIngredientInput.value); extraIngredientInput.value = ''
                 "
               >
-                Add
+                {{ 'generation.generating.add' | translate }}
               </button>
             </div>
             @if (additionalIngredients().length > 0) {
@@ -131,13 +139,17 @@
               @if (isRegenerating()) {
                 <span class="spinner"></span>
               }
-              {{ isRegenerating() ? 'Generating…' : 'Generate alternative' }}
+              {{
+                isRegenerating()
+                  ? ('generation.generating.btn-loading' | translate)
+                  : ('generation.generating.btn-generate' | translate)
+              }}
             </button>
           </div>
         </aside>
 
         <main class="instructions-main">
-          <h3>Instructions</h3>
+          <h3>{{ 'generation.generating.instructions-title' | translate }}</h3>
           <ol class="steps-list">
             @for (step of r.instructions; track $index) {
               <li>
