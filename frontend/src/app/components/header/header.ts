@@ -12,7 +12,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export class Header {
   private router = inject(Router);
   public authService = inject(AuthService);
-  private translateService = inject(TranslateService);
+  public translateService = inject(TranslateService);
 
   /**
    * Change la langue de l'application

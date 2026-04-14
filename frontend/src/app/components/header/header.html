@@ -6,11 +6,6 @@
   </div>
 
   <div class="menu-items">
-    <div class="language-switcher">
-      <button (click)="switchLanguage('fr')">Français</button>
-      <button (click)="switchLanguage('en')">English</button>
-      <p>{{ 'common.loading' | translate }}</p>
-    </div>
     @if (!authService.user()) {
       <a routerLink="/welcome" class="nav-link">{{ 'header.login' | translate }}</a>
       <a routerLink="/welcome/register" class="nav-link btn-register">{{
@@ -26,5 +21,13 @@
         <span class="icon-logout">🚪</span>
       </button>
     }
+    <div class="language-switcher">
+      <button (click)="switchLanguage('fr')" [class.active]="translateService.currentLang === 'fr'">
+        FR
+      </button>
+      <button (click)="switchLanguage('en')" [class.active]="translateService.currentLang === 'en'">
+        EN
+      </button>
+    </div>
   </div>
 </nav>
