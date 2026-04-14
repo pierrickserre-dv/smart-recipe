@@ -1,10 +1,9 @@
 import { Component, input, output } from '@angular/core';
 import { RecipeResponse } from '../../core/models/recipe.model';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [TranslateModule],
+  imports: [],
   templateUrl: './recipe-card.html',
   styleUrl: './recipe-card.css',
 })
