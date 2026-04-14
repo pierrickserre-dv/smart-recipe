@@ -1,6 +1,6 @@
 <div class="home-container">
   <header>
-    <h1>{{ 'home.title' | translate }}</h1>
+    <h1>What are we cooking today?</h1>
   </header>
 
   <div class="search-section">
@@ -9,7 +9,7 @@
       <input
         #ingredientInput
         type="text"
-        placeholder="{{ 'home.generation.ingredients-placeholder' | translate }}"
+        placeholder="Enter your ingredients..."
         (input)="(0)"
         (keyup.enter)="addIngredient(ingredientInput.value); ingredientInput.value = ''"
       />
@@ -44,11 +44,7 @@
         @if (generation.status() === 'loading') {
           <span class="spinner"></span>
         }
-        {{
-          generation.status() === 'loading'
-            ? ('home.generation.loading' | translate)
-            : ('home.generation.generate' | translate)
-        }}
+        {{ generation.status() === 'loading' ? 'The chef is thinking...' : 'Generate my recipe' }}
       </button>
     }
   </div>

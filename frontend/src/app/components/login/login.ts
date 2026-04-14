@@ -3,11 +3,10 @@ import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, TranslateModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: '../auth-card.css',
 })

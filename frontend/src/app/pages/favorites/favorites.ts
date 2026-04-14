@@ -3,12 +3,11 @@ import { RouterLink } from '@angular/router';
 import { RecipeResponse } from '../../core/models/recipe.model';
 import { RecipeService } from '../../core/services/recipe.service';
 import { RecipeCard } from '../../components/recipe-card/recipe-card';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [RouterLink, RecipeCard, TranslateModule],
+  imports: [RouterLink, RecipeCard],
   templateUrl: './favorites.html',
   styleUrl: './favorites.css',
 })

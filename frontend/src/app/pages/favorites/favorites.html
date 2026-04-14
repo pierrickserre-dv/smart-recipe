@@ -1,13 +1,11 @@
 <div>
   <div class="page-header">
-    <button class="btn-back" routerLink="/home">
-      <span class="icon">←</span> {{ 'favorites.back' | translate }}
-    </button>
-    <h1>{{ 'favorites.title' | translate }}</h1>
+    <button class="btn-back" routerLink="/home"><span class="icon">←</span> Back to Home</button>
+    <h1>Saved recipes</h1>
   </div>
 
   <div class="filter-bar">
-    <span class="filter-label">{{ 'favorites.list.preparation-time' | translate }}</span>
+    <span class="filter-label">Max preparation time</span>
     <div class="filter-badge">
       <span class="filter-icon">⏳</span>
 
@@ -33,7 +31,7 @@
 
   @if (filteredRecipes().length === 0) {
     <div class="empty-state">
-      <p>{{ 'favorites.list.empty' | translate }}</p>
+      <p>No saved recipes yet</p>
     </div>
   } @else {
     <div class="card-grid">
@@ -80,7 +78,7 @@
 
         <div class="recipe-content">
           <aside class="ingredients-sidebar">
-            <h3>{{ 'favorites.list.ingredients' | translate }}</h3>
+            <h3>Ingredients</h3>
             <ul class="ing-list">
               @for (ing of recipe.ingredients_used; track $index) {
                 <li><span class="check">✓</span> {{ ing }}</li>

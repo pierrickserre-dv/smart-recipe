@@ -1,29 +1,16 @@
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="auth-card">
-  <h2>{{ 'auth.login.title' | translate }}</h2>
+  <h2>Login to continue</h2>
   <div class="input-group">
-    <input
-      type="string"
-      formControlName="email"
-      [placeholder]="'auth.login.email-placeholder' | translate"
-    />
-    <input
-      type="password"
-      formControlName="password"
-      [placeholder]="'auth.login.password-placeholder' | translate"
-    />
+    <input type="string" formControlName="email" placeholder="Email" />
+    <input type="password" formControlName="password" placeholder="Password" />
   </div>
-  <button type="submit" class="auth-btn">{{ 'auth.login.submit-btn' | translate }}</button>
-
+  <button type="submit" class="auth-btn">Login</button>
   @if (errorMessage()) {
     <p id="errorMsg">
       {{ errorMessage() }}
     </p>
   }
-
   <p class="no-account">
-    {{ 'auth.login.no-account' | translate }}
-    <a class="createaccount-btn" href="/welcome/register">
-      {{ 'auth.login.create-link' | translate }}
-    </a>
+    Don't have an account ? <a class="createaccount-btn" href="/welcome/register">Create Account</a>
   </p>
 </form>

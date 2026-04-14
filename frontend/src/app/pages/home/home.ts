@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { Generation } from '../../components/generation/generation';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [Generation, TranslateModule],
+  imports: [Generation],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
