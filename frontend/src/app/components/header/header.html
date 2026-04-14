@@ -7,15 +7,27 @@
 
   <div class="menu-items">
     @if (!authService.user()) {
-      <a routerLink="/welcome" class="nav-link">Login</a>
-      <a routerLink="/welcome/register" class="nav-link btn-register">Create Account</a>
+      <a routerLink="/welcome" class="nav-link">{{ 'header.login' | translate }}</a>
+      <a routerLink="/welcome/register" class="nav-link btn-register">{{
+        'header.register' | translate
+      }}</a>
     } @else {
-      <button routerLink="/favorites" class="btn-nav">Saved Recipes</button>
+      <button routerLink="/favorites" class="btn-nav">
+        {{ 'header.saved-recipes' | translate }}
+      </button>
       <span class="user-email">{{ authService.user()?.email }}</span>
 
       <button (click)="authService.logout()" class="btn-logout" title="Déconnexion">
         <span class="icon-logout">🚪</span>
       </button>
     }
+    <div class="language-switcher">
+      <button (click)="switchLanguage('fr')" [class.active]="translateService.currentLang === 'fr'">
+        FR
+      </button>
+      <button (click)="switchLanguage('en')" [class.active]="translateService.currentLang === 'en'">
+        EN
+      </button>
+    </div>
   </div>
 </nav>
