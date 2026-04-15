@@ -15,6 +15,7 @@ env/
 *.log
 
 *.json
+!frontend/public/assets/i18n/*.json
 
 frontend/src/environments/environment.prod.ts
 frontend/src/environments/environment.local.ts
