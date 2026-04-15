@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="logo">
     <a style="text-decoration: none; color: var(--text-light)" routerLink="/welcome">
-      <img src="/favicon.ico" alt="Smart Recipe" style="width: 32px; height: 32px;">
+      <img src="/favicon.ico" alt="Smart Recipe" style="width: 32px; height: 32px" />
     </a>
   </div>
 
@@ -12,13 +12,9 @@
         'header.register' | translate
       }}</a>
     } @else {
-      <button routerLink="/equipment" class="btn-nav" style="font-size: 1.2rem;">
-        🍳
-      </button>
-      <button routerLink="/favorites" class="btn-nav" style="font-size: 1.2rem;">
-        ❤️
-      </button>
-      <span class="user-email">{{ (authService.user()?.email ?? '' ).split('@')?.[0] }}</span>
+      <button routerLink="/equipment" class="btn-nav" style="font-size: 1.2rem">🍳</button>
+      <button routerLink="/favorites" class="btn-nav" style="font-size: 1.2rem">❤️</button>
+      <span class="user-email">{{ (authService.user()?.email ?? '').split('@')?.[0] }}</span>
 
       <button (click)="authService.logout()" class="btn-logout" title="Déconnexion">
         <span class="icon-logout">🚪</span>
