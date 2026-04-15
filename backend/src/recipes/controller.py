@@ -7,6 +7,8 @@ from src.auth.schemas import User
 from src.config import settings
 from src.recipes.persistence import FirestoreService
 from src.recipes.schemas import (
+    EquipmentRequest,
+    EquipmentResponse,
     ImageRequest,
     ImageResponse,
     RecipeRequest,
@@ -29,7 +31,13 @@ async def generate_recipe_endpoint(
     request: RecipeRequest, user=Depends(get_current_user)
 ):
     try:
-        recipe_data = recipe_service.generate_recipe(request)
+        try:
+            equipment = await firestore.get_user_equipment(user.uid)
+        except Exception:
+            equipment = []
+        recipe_data = recipe_service.generate_recipe(
+            request, available_equipment=equipment
+        )
         if isinstance(recipe_data, dict):
             return RecipeResponse.model_validate(
                 recipe_data, context={"allowed_ingredients": request.ingredients}
@@ -40,6 +48,20 @@ async def generate_recipe_endpoint(
             status_code=500,
             detail=f"Error: The AI couldn't generate a recipe. {str(e)}",
         )
+
+
+@router.get("/account/equipment", response_model=EquipmentResponse)
+async def get_account_equipment(user: User = Depends(get_current_user)):
+    equipment = await firestore.get_user_equipment(user.uid)
+    return EquipmentResponse(equipment=equipment)
+
+
+@router.put("/account/equipment", response_model=EquipmentResponse)
+async def update_account_equipment(
+    request: EquipmentRequest, user: User = Depends(get_current_user)
+):
+    equipment = await firestore.save_user_equipment(user.uid, request.equipment)
+    return EquipmentResponse(equipment=equipment)
 
 
 @router.post("/save")

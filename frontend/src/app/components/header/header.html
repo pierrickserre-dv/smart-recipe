@@ -10,6 +10,7 @@
       <a routerLink="/welcome" class="nav-link">Login</a>
       <a routerLink="/welcome/register" class="nav-link btn-register">Create Account</a>
     } @else {
+      <button routerLink="/equipment" class="btn-nav">My Equipment</button>
       <button routerLink="/favorites" class="btn-nav">Saved Recipes</button>
       <span class="user-email">{{ authService.user()?.email }}</span>
 

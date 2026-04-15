@@ -26,7 +26,7 @@
   }
 
   @if (recipe(); as r) {
-    <div class="recipe-card" [class.regenerating]="isRegenerating()">
+    <div #recipeCard class="recipe-card" [class.regenerating]="isRegenerating()">
       @if (isRegenerating()) {
         <div class="regenerating-banner" role="status" aria-live="polite">
           <span class="spinner spinner-inline"></span>

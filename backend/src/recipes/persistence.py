@@ -58,3 +58,45 @@ class FirestoreService:
             recipe_data["id"] = doc.id
             recipes.append(recipe_data)
         return recipes
+
+    async def get_user_equipment(self, user_id: str) -> list[str]:
+        user_ref = self.db.collection("users").document(user_id)
+        user_doc = user_ref.get()
+        if not user_doc.exists:
+            return []
+
+        raw_equipment = user_doc.to_dict().get("equipment", [])
+        if not isinstance(raw_equipment, list):
+            return []
+
+        normalized: list[str] = []
+        seen: set[str] = set()
+        for item in raw_equipment:
+            if not isinstance(item, str):
+                continue
+            value = item.strip()
+            if not value:
+                continue
+            key = value.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            normalized.append(value)
+        return normalized
+
+    async def save_user_equipment(self, user_id: str, equipment: list[str]) -> list[str]:
+        normalized: list[str] = []
+        seen: set[str] = set()
+        for item in equipment:
+            value = item.strip()
+            if not value:
+                continue
+            key = value.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            normalized.append(value)
+
+        user_ref = self.db.collection("users").document(user_id)
+        user_ref.set({"equipment": normalized}, merge=True)
+        return normalized
