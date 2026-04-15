@@ -1,0 +1,87 @@
+{
+  "header": {
+    "login": "Login",
+    "register": "Create account",
+    "saved-recipes": "Saved recipes"
+  },
+  "welcome": {
+    "title": "Welcome to SmartRecipe",
+    "whyjoinus": {
+      "title": "Why join us?",
+      "bullet1": {
+        "title": "Generate unlimited recipes",
+        "text": "Create endless recipes ideas with AI technology"
+      },
+      "bullet2": {
+        "title": "Save your favorite recipes forever",
+        "text": "Keep all your favorite recipes in one place"
+      }
+    }
+  },
+
+  "home": {
+    "title": "What are we cooking today?",
+    "generation": {
+      "loading": "The chef is thinking...",
+      "generate": "Generate my recipe",
+      "ingredients-placeholder": "Enter your ingredients..."
+    }
+  },
+
+  "favorites": {
+    "title": "Saved recipes",
+    "back": "Back home",
+    "list": {
+      "preparation-time": "Max preparation time",
+      "empty": "No saved recipes yet",
+      "ingredients": "Ingredients",
+      "instructions": "Instructions"
+    }
+  },
+
+  "generation": {
+    "saving": {
+      "saved": "Saved",
+      "save-loading": "Saving...",
+      "save": "Save",
+      "see-saved": "See saved recipes"
+    },
+    "generating": {
+      "new-version": "Creating a new version...",
+      "preview": "Generating preview...",
+      "ingredients-title": "Ingredients",
+      "instructions-title": "Instructions",
+      "alternative": "Tap an ingredient to exclude it from the next alternative. Tap again to include it.",
+      "add-ingredients": "Add ingredients",
+      "placeholder-extra": "e.g. basil, cream...",
+      "add": "Add",
+      "btn-loading": "Generating...",
+      "btn-generate": "Generate alternative"
+    }
+  },
+
+  "auth": {
+    "login": {
+      "title": "Login to continue",
+      "email-placeholder": "Email",
+      "password-placeholder": "Password",
+      "submit-btn": "Login",
+      "no-account": "Don't have an account ?",
+      "create-link": "Create Account"
+    },
+    "register": {
+      "title": "Register",
+      "email-placeholder": "Email",
+      "email-error": "Invalid email",
+      "password-placeholder": "Password",
+      "password-error": "Password must be at least 8 characters long.",
+      "submit-btn": "Register",
+      "already-account": "Already have an account ?",
+      "login-link": "Login"
+    }
+  },
+
+  "common": {
+    "delete": "Delete"
+  }
+}

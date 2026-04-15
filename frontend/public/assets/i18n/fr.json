@@ -1,0 +1,87 @@
+{
+  "header": {
+    "login": "Connexion",
+    "register": "Créer un compte",
+    "saved-recipes": "Recettes enregistrées"
+  },
+  "welcome": {
+    "title": "Bienvenue sur SmartRecipe",
+    "whyjoinus": {
+      "title": "Pourquoi nous rejoindre ?",
+      "bullet1": {
+        "title": "Générez des recettes en illimité",
+        "text": "Créez des idées de recettes à l'infini grâce à la technologie IA"
+      },
+      "bullet2": {
+        "title": "Enregistrez vos recettes favorites",
+        "text": "Gardez toutes vos recettes préférées au même endroit, pour toujours"
+      }
+    }
+  },
+
+  "home": {
+    "title": "Que cuisine-t-on aujourd'hui ?",
+    "generation": {
+      "loading": "Le chef réfléchit...",
+      "generate": "Générer ma recette",
+      "ingredients-placeholder": "Entrez vos ingrédients..."
+    }
+  },
+
+  "favorites": {
+    "title": "Recettes enregistrées",
+    "back": "Retour à l'accueil",
+    "list": {
+      "preparation-time": "Temps de préparation max",
+      "empty": "Aucune recette enregistrée pour le moment",
+      "ingredients": "Ingrédients",
+      "instructions": "Instructions"
+    }
+  },
+
+  "generation": {
+    "saving": {
+      "saved": "Enregistré",
+      "save-loading": "Enregistrement...",
+      "save": "Enregistrer",
+      "see-saved": "Voir mes favoris"
+    },
+    "generating": {
+      "new-version": "Création d'une nouvelle version...",
+      "preview": "Génération de l'aperçu...",
+      "ingredients-title": "Ingrédients",
+      "instructions-title": "Instructions",
+      "alternative": "Appuyez sur un ingrédient pour l'exclure de la prochaine version. Appuyez à nouveau pour l'inclure.",
+      "add-ingredients": "Ajouter des ingrédients",
+      "placeholder-extra": "ex : basilic, crème...",
+      "add": "Ajouter",
+      "btn-loading": "Génération...",
+      "btn-generate": "Générer une alternative"
+    }
+  },
+
+  "auth": {
+    "login": {
+      "title": "Connectez-vous pour continuer",
+      "email-placeholder": "E-mail",
+      "password-placeholder": "Mot de passe",
+      "submit-btn": "Se connecter",
+      "no-account": "Vous n'avez pas de compte ?",
+      "create-link": "Créer un compte"
+    },
+    "register": {
+      "title": "Inscription",
+      "email-placeholder": "E-mail",
+      "email-error": "E-mail invalide",
+      "password-placeholder": "Mot de passe",
+      "password-error": "Le mot de passe doit faire au moins 8 caractères.",
+      "submit-btn": "S'inscrire",
+      "already-account": "Vous avez déjà un compte ?",
+      "login-link": "Se connecter"
+    }
+  },
+
+  "common": {
+    "delete": "Supprimer"
+  }
+}
