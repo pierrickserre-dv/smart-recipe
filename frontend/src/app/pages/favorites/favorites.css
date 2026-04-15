@@ -6,6 +6,14 @@ h1 {
   text-align: center;
 }
 
+h2, h3 {
+  color: white !important;
+}
+
+h3 {
+  text-align: center;
+}
+
 .page-header {
   display: flex;
   flex-direction: column;
@@ -339,7 +347,6 @@ h3 {
 
 .step-number {
   background: var(--primary-green);
-  /* color: var(--text-dark); */
   color: white;
   min-width: 28px;
   height: 28px;

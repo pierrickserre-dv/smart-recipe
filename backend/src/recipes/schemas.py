@@ -19,6 +19,14 @@ class RecipeRequest(BaseModel):
     ingredients: List[str] = Field(..., min_length=1, max_length=50)
 
 
+class EquipmentRequest(BaseModel):
+    equipment: List[str] = Field(default_factory=list, max_length=50)
+
+
+class EquipmentResponse(BaseModel):
+    equipment: List[str]
+
+
 class RecipeResponse(BaseModel):
     title: str
     prep_time: str

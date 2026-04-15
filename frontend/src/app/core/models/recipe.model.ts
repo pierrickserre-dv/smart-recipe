@@ -37,3 +37,11 @@ export interface ImageResponse {
   image_base64: string;
   mime_type: string;
 }
+
+export interface EquipmentRequest {
+  equipment: string[];
+}
+
+export interface EquipmentResponse {
+  equipment: string[];
+}
