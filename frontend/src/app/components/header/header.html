@@ -12,11 +12,13 @@
         'header.register' | translate
       }}</a>
     } @else {
-      <button routerLink="/equipment" class="btn-nav">My Equipment</button>
-      <button routerLink="/favorites" class="btn-nav">
-        {{ 'header.saved-recipes' | translate }}
+      <button routerLink="/equipment" class="btn-nav" style="font-size: 1.2rem;">
+        🍳
       </button>
-      <span class="user-email">{{ authService.user()?.email }}</span>
+      <button routerLink="/favorites" class="btn-nav" style="font-size: 1.2rem;">
+        ❤️
+      </button>
+      <span class="user-email">{{ (authService.user()?.email ?? '' ).split('@')?.[0] }}</span>
 
       <button (click)="authService.logout()" class="btn-logout" title="Déconnexion">
         <span class="icon-logout">🚪</span>

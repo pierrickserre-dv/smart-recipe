@@ -32,7 +32,7 @@
 }
 
 .user-email {
-  font-size: 0.85rem;
+  /*font-size: 0.85rem;*/
   color: var(--text-gray);
   opacity: 0.8;
   border-left: 1px solid var(--border-grey);
