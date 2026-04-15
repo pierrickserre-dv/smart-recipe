@@ -84,7 +84,9 @@ class FirestoreService:
             normalized.append(value)
         return normalized
 
-    async def save_user_equipment(self, user_id: str, equipment: list[str]) -> list[str]:
+    async def save_user_equipment(
+        self, user_id: str, equipment: list[str]
+    ) -> list[str]:
         normalized: list[str] = []
         seen: set[str] = set()
         for item in equipment:
