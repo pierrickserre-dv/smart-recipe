@@ -26,13 +26,26 @@ firestore = FirestoreService()
 gcs = GoogleStorageService(settings.storage_bucket)
 
 
+def _get_user_uid(user: User | dict) -> str:
+    if isinstance(user, dict):
+        uid = user.get("uid")
+    else:
+        uid = user.uid
+
+    if not uid:
+        raise HTTPException(status_code=401, detail="Invalid user payload.")
+
+    return uid
+
+
 @router.post("/generate", response_model=RecipeResponse)
 async def generate_recipe_endpoint(
     request: RecipeRequest, user=Depends(get_current_user)
 ):
+    user_uid = _get_user_uid(user)
     try:
         try:
-            equipment = await firestore.get_user_equipment(user.uid)
+            equipment = await firestore.get_user_equipment(user_uid)
         except Exception:
             equipment = []
         recipe_data = recipe_service.generate_recipe(
@@ -52,7 +65,7 @@ async def generate_recipe_endpoint(
 
 @router.get("/account/equipment", response_model=EquipmentResponse)
 async def get_account_equipment(user: User = Depends(get_current_user)):
-    equipment = await firestore.get_user_equipment(user.uid)
+    equipment = await firestore.get_user_equipment(_get_user_uid(user))
     return EquipmentResponse(equipment=equipment)
 
 
@@ -60,7 +73,9 @@ async def get_account_equipment(user: User = Depends(get_current_user)):
 async def update_account_equipment(
     request: EquipmentRequest, user: User = Depends(get_current_user)
 ):
-    equipment = await firestore.save_user_equipment(user.uid, request.equipment)
+    equipment = await firestore.save_user_equipment(
+        _get_user_uid(user), request.equipment
+    )
     return EquipmentResponse(equipment=equipment)
 
 
@@ -68,6 +83,7 @@ async def update_account_equipment(
 async def save_recipe(
     request: SaveRecipeRequest, user: User = Depends(get_current_user)
 ):
+    user_uid = _get_user_uid(user)
     try:
         image_url = None
         recipe_id_preview = hashlib.md5(
@@ -78,7 +94,7 @@ async def save_recipe(
             try:
                 image_url = upload_recipe_image(
                     gcs,
-                    user_id=user.uid,
+                    user_id=user_uid,
                     recipe_id=recipe_id_preview,
                     image_base64=request.image_base64,
                     mime_type=request.image_mime_type,
@@ -87,7 +103,7 @@ async def save_recipe(
                 print(f"DEBUG: Image upload failed (non-fatal): {e}")
 
         recipe_id = await firestore.save_recipe_for_user(
-            user.uid, request, image_url=image_url
+            user_uid, request, image_url=image_url
         )
         return {
             "status": "success",
@@ -104,8 +120,9 @@ async def save_recipe(
 
 @router.delete("/{recipe_id}")
 async def delete_recipe(recipe_id: str, user: User = Depends(get_current_user)):
+    user_uid = _get_user_uid(user)
     try:
-        image_url = await firestore.delete_recipe_for_user(user.uid, recipe_id)
+        image_url = await firestore.delete_recipe_for_user(user_uid, recipe_id)
         if image_url:
             delete_recipe_image(gcs, image_url)
         return {
@@ -123,7 +140,7 @@ async def delete_recipe(recipe_id: str, user: User = Depends(get_current_user)):
 @router.get("")
 async def get_recipes(user: User = Depends(get_current_user)):
     try:
-        recipes = await firestore.get_recipes(user.uid)
+        recipes = await firestore.get_recipes(_get_user_uid(user))
         return recipes
     except Exception as e:
         print(f"DEBUG: Firestore Error: {e}")
