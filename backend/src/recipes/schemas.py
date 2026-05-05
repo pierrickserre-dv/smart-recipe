@@ -19,11 +19,16 @@ class RecipeRequest(BaseModel):
     ingredients: List[str] = Field(..., min_length=1, max_length=50)
 
 
+class Ingredient(BaseModel):
+    name: str
+    quantity: str
+
+
 class RecipeResponse(BaseModel):
     title: str
     prep_time: str
     difficulty: str
-    ingredients_used: List[str]
+    ingredients_used: List[Ingredient]
     instructions: List[str]
 
     @field_validator("ingredients_used")
