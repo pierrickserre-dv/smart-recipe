@@ -13,8 +13,8 @@ except ImportError:
 
 class RecipeAIService:
     def __init__(self):
-        self.model_id = "gemini-2.5-flash"
-        self.image_model_id = "imagen-3.0-generate-002"
+        self.model_id = "gemini-3.8-flash"
+        self.image_model_id = "gemini-3.1-flash-lite-image"
 
         self.client = genai.Client(
             vertexai=True,
@@ -66,15 +66,18 @@ class RecipeAIService:
             "with no text or logos."
         )
 
-        response = self.client.models.generate_images(
+        response = self.client.models.generate_content(
             model=self.image_model_id,
-            prompt=prompt,
-            config=types.GenerateImagesConfig(
-                number_of_images=1,
-                aspect_ratio="16:9",
-                output_mime_type="image/jpeg",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_modalities=["IMAGE"],
+                image_config=types.ImageConfig(aspect_ratio="16:9"),
             ),
         )
 
-        image_bytes = response.generated_images[0].image.image_bytes
-        return base64.b64encode(image_bytes).decode("utf-8"), "image/jpeg"
+        image = next(
+            part.inline_data
+            for part in response.candidates[0].content.parts
+            if part.inline_data
+        )
+        return base64.b64encode(image.data).decode("utf-8"), image.mime_type
