@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
+  EquipmentRequest,
+  EquipmentResponse,
   ImageResponse,
   RecipeResponse,
   SaveRecipeRequest,
@@ -31,5 +33,14 @@ export class RecipeService {
 
   generateImage(title: string): Observable<ImageResponse> {
     return this.http.post<ImageResponse>(`${this.baseUrl}/generate-image`, { title });
+  }
+
+  getEquipment(): Observable<EquipmentResponse> {
+    return this.http.get<EquipmentResponse>(`${this.baseUrl}/account/equipment`);
+  }
+
+  updateEquipment(equipment: string[]): Observable<EquipmentResponse> {
+    const payload: EquipmentRequest = { equipment };
+    return this.http.put<EquipmentResponse>(`${this.baseUrl}/account/equipment`, payload);
   }
 }
