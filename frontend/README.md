@@ -1,137 +1,31 @@
-# Smart Recipe AI
+# Smart Recipe AI : frontend
 
-**Smart Recipe AI** est une application web moderne qui utilise l'intelligence artificielle pour transformer vos ingrédients restants en recettes gastronomiques. Le projet repose sur une architecture découplée avec un backend FastAPI et un frontend Angular, intégrant les technologies Google Cloud (Gemini) et Firebase.
+Application Angular 21 de Smart Recipe AI. L'architecture, le déploiement et la configuration complète sont décrits dans le [README principal](../README.md).
 
----
+## Lancer en local
 
-## Fonctionnalités
-
-- **Authentification Sécurisée** : Inscription et connexion gérées par Firebase Auth (Tokens JWT).
-- **Gestion Dynamique des Ingrédients** : Interface fluide pour ajouter et supprimer vos ingrédients en temps réel.
-- **Génération de Recettes par IA** : Utilisation de **Gemini 2.5 Flash** pour créer des recettes complètes (Titre, Temps, Difficulté, Ingrédients, Instructions).
-- **Régénération Intelligente** : Possibilité de générer une nouvelle variante de recette sans modifier votre sélection d'ingrédients, même si le panier est vidé.
-- **Expérience Utilisateur (UX)** : Design "Dark Mode" épuré avec des composants réactifs, animations fluides et boutons contextuels.
-
----
-
-## 🛠 Stack Technique
-
-### Backend
-
-- **Framework** : FastAPI (Python 3.12)
-- **IA** : Google GenAI SDK (Modèle : `gemini-2.5-flash`)
-- **Sécurité** : Firebase Admin SDK (Vérification des Tokens en header via Interceptor)
-- **Serveur** : Uvicorn
-
-### Frontend
-
-- **Framework** : Angular 21.1.5 (Signals, Standalone Components)
-- **Authentification** : Firebase Auth
-- **Design** : CSS3 moderne (Flexbox, CSS Variables, Animations @keyframes)
-
----
-
-## Installation et Configuration
-
-### 1. Configuration du Backend
-
-**Prérequis** : Python 3.12+ et le SDK Google Cloud installé.
+Prérequis : Node.js 24, et le backend lancé sur http://localhost:8000.
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # Sur Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-#### Variables d'environnement (.env)
-
-Créez un fichier `.env` dans le dossier `/backend` :
-
-```env
-GOOGLE_CLOUD_PROJECT=votre-projet-id
-GOOGLE_CLOUD_LOCATION=votre-region
-```
-
-> **Note** : Assurez-vous d'avoir exécuté `gcloud auth application-default login` dans votre terminal pour l'accès à Gemini.
-
-#### Lancement
-
-```bash
-python -m uvicorn main:app --reload
-```
-
----
-
-### 2. Configuration du Frontend
-
-**Prérequis** : Node.js et Angular CLI installés.
-
-```bash
-cd frontend
 npm install
+cp src/environments/environment.ts src/environments/environment.local.ts
+# Dans environment.local.ts, remplacer YOUR-API-KEY par la clé web Firebase
+npx ng serve
 ```
 
-#### Environnement
+L'application est disponible sur http://localhost:4200.
 
-Configurez vos clés Firebase dans `src/environments/environment.local.ts` :
+## Commandes utiles
 
-```ts
-export const environment = {
-  production: false,
-  firebase: {
-    apiKey: 'VOTRE_API_KEY',
-    authDomain: 'VOTRE_AUTH_DOMAIN',
-    projectId: 'VOTRE_PROJECT_ID',
-    storageBucket: 'VOTRE_STORAGE_BUCKET',
-    messagingSenderId: 'VOTRE_SENDER_ID',
-    appId: 'VOTRE_APP_ID',
-  },
-};
-```
+| Commande | Rôle |
+|---|---|
+| `npx ng serve` | Serveur de développement (configuration `local`) |
+| `npx ng build --configuration production` | Build de production dans `dist/smart-recipe-front/browser` |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier |
 
-#### Lancement
+Utilisez `npx ng` plutôt que `ng`, pour lancer la version d'Angular CLI du projet.
 
-```bash
-ng serve
-```
+## Déploiement
 
----
-
-## Architecture et Workflow Git
-
-Le projet utilise un système de branches par fonctionnalité pour garantir la stabilité du code :
-
-- `main` : Branche stable de production.
-- `feat/auth` : Authentification et sécurité Firebase.
-- `feat/recipe-generation-frontend` : Logique d'interface et intégration de la génération.
-
-### Astuce Git (Changement de branche avec modifications en cours)
-
-```bash
-git stash        # Sauvegarde temporaire des modifications non commitées
-git checkout <nom-de-la-branche>
-git stash pop    # Restauration des modifications sur la nouvelle branche
-```
-
----
-
-## Tests Backend
-
-Suite de tests automatisés avec Pytest :
-
-```bash
-cd backend
-pytest
-```
-
----
-
-## Roadmap
-
-- [ ] Persistance des recettes générées dans Firebase Firestore.
-- [ ] Ajout de filtres par régimes alimentaires (Végétarien, Sans Gluten, Allergies).
-- [ ] Exportation des recettes au format PDF.
-- [ ] Système de notation et de sauvegarde des recettes préférées.
-
----
+Le frontend est publié automatiquement sur Firebase Hosting (https://sandbox-pserre.web.app) à chaque merge dans `main`, par le workflow `.github/workflows/deploy.yml`. La configuration de Firebase Hosting est dans `firebase.json`.
