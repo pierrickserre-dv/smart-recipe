@@ -1,3 +1,5 @@
+from unittest.mock import AsyncMock
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -114,3 +116,25 @@ def test_generate_image_service_error(mocker, override_auth):
     response = client.post("/recipes/generate-image", json={"title": "Pasta"})
     assert response.status_code == 503
     assert "error" in response.json()["detail"].lower()
+
+
+def test_get_account_equipment(mocker, override_auth):
+    mocker.patch(
+        "src.recipes.controller.firestore.get_user_equipment",
+        new=AsyncMock(return_value=["oven", "air fryer"]),
+    )
+    response = client.get("/recipes/account/equipment")
+    assert response.status_code == 200
+    assert response.json() == {"equipment": ["oven", "air fryer"]}
+
+
+def test_update_account_equipment(mocker, override_auth):
+    mocker.patch(
+        "src.recipes.controller.firestore.save_user_equipment",
+        new=AsyncMock(return_value=["oven", "pan"]),
+    )
+    response = client.put(
+        "/recipes/account/equipment", json={"equipment": ["oven", "pan", "pan"]}
+    )
+    assert response.status_code == 200
+    assert response.json() == {"equipment": ["oven", "pan"]}

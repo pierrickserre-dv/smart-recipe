@@ -22,9 +22,19 @@ class RecipeAIService:
             location=settings.google_cloud_location,
         )
 
-    def generate_recipe(self, data: RecipeRequest) -> RecipeResponse:
+    def generate_recipe(
+        self, data: RecipeRequest, available_equipment: list[str] | None = None
+    ) -> RecipeResponse:
+        equipment = available_equipment or []
+        equipment_clause = (
+            f"The user can cook with these tools only: {', '.join(equipment)}. "
+            "Do not include any instruction that requires missing equipment."
+            if equipment
+            else "The user did not provide equipment constraints."
+        )
         prompt = (
             f"I have these ingredients: {', '.join(data.ingredients)}. "
+            f"{equipment_clause} "
             "Create a creative recipe using ONLY these plus salt, pepper"
             "(not black pepper, just pepper), oil, butter, water, olive oil"
             "and/or garlic."
